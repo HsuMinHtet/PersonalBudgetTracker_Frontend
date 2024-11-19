@@ -1,0 +1,52 @@
+.inputTextarea {
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0rem;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.5s;
+    width: fit-content;
+    position: relative;
+    max-width: 300px;
+}
+
+.inputTextarea:hover {
+    transition: all 0.5s;
+}
+
+.inputTextarea label {
+    display: block;
+    color: #BCBCBC;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.inputTextarea textarea {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 200;
+    transition: all 0.5s;
+    outline: none;
+    display: block;
+    background-color: transparent;
+    border: solid 2px #343434;
+    width: 300px;
+}
+
+.inputTextarea:hover textarea {
+    border-color: #737373;
+    transition: all ease 0.5s;
+}
+
+.primary {
+    
+}
+
+.primary:hover {
+    /* background-color: transparent;
+    color: #D2CEFA;
+    border: solid 3px #D2CEFA; */
+}
