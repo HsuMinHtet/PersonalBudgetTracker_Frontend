@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import Button from '../../components/common/Button';
 import Table from '../../components/common/Table';
 import InputText from '../../components/common/InputText';
-import dashboardImg from '../../assets/img/dashboard-img.svg';
 import CardSelect from '../../components/common/Select';
 import Modal from '../../components/common/Modal';
+import categoryImg from '../../assets/img/category-img.svg';
 import { Edit, Trash } from 'iconsax-react';
 
-function dashboard() {
+function category() {
 
     const columns = ['No', 'Categories', 'Type'];
     const data = [
@@ -26,7 +26,7 @@ function dashboard() {
 
     const actions = [
         { icon: <Edit />, type: 'edit', onClick: handleEdit },
-        { icon: <Trash />, type: 'delete', onClick: handleDelete },
+        { icon: <Trash />, type: 'delete',  onClick: handleDelete },
     ];
 
     //Select Option
@@ -49,15 +49,15 @@ function dashboard() {
         <div className='flex flex-col'>
             <div className='flex items-center justify-center flex-row max-w-screen-lg p-4'>
                 <div>
-                    <h1 className='font-black text-2xl'>Track Your Finances with Ease</h1>
-                    <p className='py-4 mb-4'>Welcome to your Budget Tracker Dashboard! Here, you can seamlessly manage your financial transitions. View all your income and expenses at a glance with the detailed data table. Use the ‘Add Transition’ button to quickly record your financial activities—whether you're adding an income source or tracking an expense. The interactive modal makes it simple to categorize and document every transition. Take control of your finances today!</p>
+                    <h1 className='font-black text-2xl'>Customize Your Categories</h1>
+                    <p className='py-4 mb-4'>This is your hub for managing transition categories! Easily add new categories with the Add Category button to tailor your budget tracker to your unique needs. Group your income and expenses into meaningful categories, making it simple to review and analyze your financial habits. Stay in control of your budget by keeping your categories organized and up-to-date!</p>
                 </div>
-                <img src={dashboardImg} alt="Categories" className="h-60 w-60 p-6" />
+                <img src={categoryImg} alt="Categories" className="h-60 w-60 p-6" />
             </div>
 
-            <div className='flex items-center justify-between flex-row max-w-screen-lg px-4'>
-                <h1 className='font-medium text-xl'>Transitions</h1>
-                <Button text='Add Transition' onClick={openModal} variant="primary" tailwindClass="w-full" />
+            <div className='flex items-center justify-between flex-row max-w-screen-lg pl-4 pr-0'>
+                <h1 className='font-medium text-xl'>Categories</h1>
+                <Button text='Add Category' onClick={openModal}  variant="primary" tailwindClass="w-full" />
             </div>
 
             <div className='flex items-center justify-center flex-row max-w-screen-lg px-4'>
@@ -79,4 +79,4 @@ function dashboard() {
     )
 }
 
-export default dashboard;
+export default category;

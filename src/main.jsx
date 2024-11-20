@@ -6,6 +6,9 @@ import Footer from './components/layout/footer/footer.jsx';
 import Home from './pages/home/home.jsx';
 import Login from './pages/login/login.jsx';
 import Register from './pages/register/register.jsx';
+import Reset from './pages/reset/reset.jsx';
+import Category from './pages/category/category.jsx';
+import Dashboard from './pages/dashboard/dashboard.jsx';
 import './main.css';
 
 const applyDefaultTheme = () => {
@@ -40,6 +43,9 @@ createRoot(document.getElementById('budgetApp')).render(
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/reset" element={<Reset />} />
+          <Route path="/category" element={<Category />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
 
       </main>

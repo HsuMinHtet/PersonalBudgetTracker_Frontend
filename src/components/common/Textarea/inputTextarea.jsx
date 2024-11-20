@@ -7,7 +7,7 @@ const inputTextarea = ({ labelFor, type = 'text', labelName, variant = 'primary'
 
     return (
         <div className={inputTextareaClass}>
-            <label htmlFor={labelFor}>{labelName}</label>
+            <label htmlFor={labelFor} className="text-textColor dark:text-darkTextColor">{labelName}</label>
             <textarea type={type} id={inputId} name={inputName} placeholder={placeholder} rows="4" />
         </div>
     );

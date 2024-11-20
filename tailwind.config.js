@@ -9,6 +9,7 @@ export default {
         primary: '#D2CEFA',
         secondary: '#64748b',
         bgColor: '#fafafa',
+        borderColor: '#AAAAAA',
         textColor: '#484848',
         primaryTextColor: '#D2CEFA',
         cardBg: '#FAFAFA',
@@ -17,6 +18,7 @@ export default {
         darkPrimary: '#D2CEFA',
         darkSecondary: '#334155',
         darkBgColor: '#272727',
+        darkBorderColor: '#343434',
         darkTextColor: '#AAAAAA',
         darkPrimaryTextColor: '#D2CEFA',
         darkCardBg: '#211F1F'

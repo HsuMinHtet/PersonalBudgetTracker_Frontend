@@ -30,7 +30,7 @@ function Login() {
         <div className='flex items-center justify-center flex-row max-w-screen-lg p-4'>
             <img src={loginImg} alt="Budget App Home Page Illustration" className="h-96 w-96 p-6 mr-6" />
             <div className='bg-cardBg dark:bg-darkCardBg p-12'>
-                <h1 className='font-black text-2xl mb-12'>Login</h1>
+                <h1 className='font-black text-2xl mb-12 px-3'>Login</h1>
 
                 {/* Show error message if any */}
                 {error && <div className="text-red-500 mb-4">{error}</div>}
