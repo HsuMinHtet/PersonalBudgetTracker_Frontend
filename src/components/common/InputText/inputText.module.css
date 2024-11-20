@@ -17,7 +17,6 @@
 
 .inputText label {
     display: block;
-    color: #BCBCBC;
     font-size: 0.9em;
     font-weight: 500;
 }
@@ -31,9 +30,13 @@
     outline: none;
     display: block;
     background-color: transparent;
-    border: solid 2px #343434;
+    border: solid 2px #AAAAAA;
     width: 300px;
     height: 38px;
+}
+
+.dark .inputText input {
+    border: solid 2px #343434;
 }
 
 .inputText:hover input {

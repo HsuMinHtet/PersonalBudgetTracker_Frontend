@@ -7,7 +7,7 @@ const inputText = ({ labelFor, type = 'text', labelName, variant = 'primary', in
 
     return (
         <div className={inputTextClass}>
-            <label htmlFor={labelFor}>{labelName}</label>
+            <label htmlFor={labelFor} className="text-textColor dark:text-darkTextColor">{labelName}</label>
             <input type={type} id={inputId} name={inputName} placeholder={placeholder} value={value} onChange={onChange} />
         </div>
     );

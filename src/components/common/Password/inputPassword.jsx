@@ -16,7 +16,7 @@ const inputPassword = ({ labelFor, labelName, variant = 'primary', inputId, inpu
 
     return (
         <div className={inputPasswordClass}>
-            <label htmlFor={labelFor}>{labelName}</label>
+            <label htmlFor={labelFor} className="text-textColor dark:text-darkTextColor">{labelName}</label>
             <input type={isPasswordVisible ? 'text' : 'password'} id={inputId} name={inputName} placeholder={placeholder} value={value} onChange={onChange} />
             <div onClick={togglePassword} className={showHidePwdClass}>
                 {isPasswordVisible ? (
