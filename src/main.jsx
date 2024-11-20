@@ -18,6 +18,7 @@ import Reset from "./pages/reset/reset.jsx";
 import Category from "./pages/category/category.jsx";
 import Dashboard from "./pages/dashboard/dashboard.jsx";
 import "./main.css";
+import ProtectedRoutes from "./pages/routes/ProtectedRoutes.jsx";
 
 const applyDefaultTheme = () => {
   const savedMode = localStorage.getItem("darkMode");
@@ -43,9 +44,9 @@ createRoot(document.getElementById("budgetApp")).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Router>
+        <ProtectedRoutes />
+        {/* <Router>
           <Header />
-
           <main className="h-85v bg-bgColor dark:bg-darkBgColor text-textColor dark:text-darkTextColor px-4 flex justify-center">
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />
@@ -58,7 +59,7 @@ createRoot(document.getElementById("budgetApp")).render(
             </Routes>
           </main>
           <Footer />
-        </Router>
+        </Router> */}
       </PersistGate>
     </Provider>
   </StrictMode>

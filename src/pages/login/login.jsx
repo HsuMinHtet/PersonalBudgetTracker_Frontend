@@ -40,7 +40,6 @@ function Login() {
             isLoggedIn: true,
           })
         );
-
         navigate("/register");
       })
       .catch((error) => {
