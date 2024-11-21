@@ -40,7 +40,12 @@ function Login() {
             isLoggedIn: true,
           })
         );
-        navigate("/register");
+        // Navigate based on user role
+        const roleRoutes = {
+          ADMIN: "/admin-dashboard",
+          ACCOUNT_HOLDER: "/dashboard",
+        };
+        navigate(roleRoutes[response.data.role] || "/");
       })
       .catch((error) => {
         console.log(error);
