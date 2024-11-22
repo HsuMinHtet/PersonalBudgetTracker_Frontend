@@ -1,0 +1,12 @@
+.profileImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  background-color: transparent;
+  color: #ffffff;
+  font-size: 30px;
+  border-radius: 10%;
+  font-weight: 800;
+}

@@ -1,4 +1,4 @@
-import Button from '../../components/common/Button';
+import { Button } from '../../components/common';
 import InputText from '../../components/common/InputText';
 import resetImg from '../../assets/img/reset-img.svg';
 

@@ -1,7 +1,4 @@
-import Button from '../../components/common/Button';
-import InputText from '../../components/common/InputText';
-import InputPassword from '../../components/common/Password';
-import InputTextarea from '../../components/common/Textarea';
+import { Button, InputText, InputPassword, InputTextarea } from '../../components/common';
 import registerImg from '../../assets/img/register-img.svg';
 
 function register() {

@@ -1,8 +1,5 @@
 import { useState } from "react";
-import Button from "../../components/common/Button";
-import InputText from "../../components/common/InputText";
-import InputPassword from "../../components/common/Password";
-import Link from "../../components/common/Link";
+import { Button, InputText, InputPassword, Link } from '../../components/common';
 import loginImg from "../../assets/img/login-img.svg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
