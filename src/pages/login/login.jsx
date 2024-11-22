@@ -8,6 +8,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../features/auth/authSlice";
+import { AUTH_ENDPOINTS } from "../../config/apiConfig";
 
 function Login() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ function Login() {
 
   const authenticate = (email, password) => {
     axios
-      .post("http://localhost:8080/api/v1/auth/authenticate", {
+      .post(AUTH_ENDPOINTS.LOGIN, {
         email,
         password,
       })
