@@ -5,3 +5,11 @@
 #budgetApp {
     overflow-x: hidden!important;
 }
+
+html {
+  --cursor-color: #D2CEFA;
+}
+
+html.dark {
+  --cursor-color: #FAFAFA;
+}

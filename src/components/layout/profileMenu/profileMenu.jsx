@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function profileMenu() {
 
     return (
-        <nav>
+        <nav className="w-max">
             <div className="flex flex-col">
                 <Link
                     className="m-2 color-textColor text-primaryTextColor font-bold hover:text-primaryTextColor hover:dark:text-darkPrimaryTextColor"
