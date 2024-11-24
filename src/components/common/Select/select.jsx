@@ -4,7 +4,7 @@ import styles from './select.module.css';
 import incomeImg from '../../../assets/img/income-img.svg';
 import expenseImg from '../../../assets/img/expense-img.svg';
 
-const YesNoRadioCard = ({ name, onChange }) => {
+const CardSelect = ({ name, onChange }) => {
     const [selected, setSelected] = useState(null);
 
     const handleSelect = (value) => {
@@ -56,9 +56,9 @@ const YesNoRadioCard = ({ name, onChange }) => {
     );
 };
 
-YesNoRadioCard.propTypes = {
+CardSelect.propTypes = {
     name: PropTypes.string.isRequired, // Name for the radio input group
     onChange: PropTypes.func.isRequired, // Callback when a selection is made
 };
 
-export default YesNoRadioCard;
+export default CardSelect;

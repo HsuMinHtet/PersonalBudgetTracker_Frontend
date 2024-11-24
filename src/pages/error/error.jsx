@@ -1,5 +1,5 @@
 import homeImg from "../../assets/img/home.svg";
-import Button from "../../components/common/Button";
+import { Button } from '../../components/common';
 
 function error() {
   return (

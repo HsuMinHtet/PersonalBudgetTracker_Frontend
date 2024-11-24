@@ -1,1 +1,9 @@
 export { default as Button } from './Button';
+export { default as Avatar } from './Avatar';
+export { default as InputText } from './InputText';
+export { default as Link } from './Link';
+export { default as Modal } from './Modal';
+export { default as InputPassword } from './Password';
+export { default as CardSelect } from './Select';
+export { default as Table } from './Table';
+export { default as InputTextarea } from './Textarea';

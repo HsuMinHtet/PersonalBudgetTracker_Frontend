@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import Button from '../../components/common/Button';
-import Table from '../../components/common/Table';
-import InputText from '../../components/common/InputText';
-import CardSelect from '../../components/common/Select';
-import Modal from '../../components/common/Modal';
+import { Button, Table, InputText, CardSelect, Modal } from '../../components/common';
 import categoryImg from '../../assets/img/category-img.svg';
 import { Edit, Trash } from 'iconsax-react';
 

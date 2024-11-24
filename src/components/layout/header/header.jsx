@@ -5,14 +5,19 @@ import logoLight from "../../../assets/img/logo-light.svg";
 import logoDark from "../../../assets/img/logo-dark.svg";
 import { Sun1, Moon } from "iconsax-react";
 import { useSelector } from "react-redux";
+import useSound from 'use-sound';
+import boopSfx from '../../../assets/sound/click.wav';
 
 function header() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const { role } = useSelector((state) => state.auth);
+  const [play] = useSound(boopSfx);
 
   // Function to toggle dark mode
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
+    play();
+    
     setIsDarkMode(newMode);
     if (newMode) {
       document.documentElement.classList.add("dark");
@@ -53,7 +58,7 @@ function header() {
       </Link>
       <div className="flex items-center">
         <Menu />
-        <div onClick={toggleDarkMode} className="cursor-pointer ml-2">
+        <div onClick={toggleDarkMode} className="ml-2 hover:animate-pulse hover:cursor-none">
           {isDarkMode ? (
             <Sun1
               size="24"

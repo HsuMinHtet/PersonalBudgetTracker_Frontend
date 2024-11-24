@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import Button from '../../components/common/Button';
-import Table from '../../components/common/Table';
-import InputText from '../../components/common/InputText';
+import { Button, Table, InputText, CardSelect, Modal } from '../../components/common';
 import dashboardImg from '../../assets/img/dashboard-img.svg';
-import CardSelect from '../../components/common/Select';
-import Modal from '../../components/common/Modal';
 import { Edit, Trash } from 'iconsax-react';
 
 function dashboard() {

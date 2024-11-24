@@ -1,4 +1,3 @@
-
 let currentYear = new Date().getFullYear()
 
 function footer() {

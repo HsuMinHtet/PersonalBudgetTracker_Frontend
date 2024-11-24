@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
+import { Provider } from "react-redux"; // Import Provider
 import { store, persistor } from "./app/store";
 import { PersistGate } from "redux-persist/integration/react";
 import {
@@ -9,7 +10,6 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useSelector } from "react-redux"; // To get state from Redux
 import Header from "./components/layout/header/header.jsx";
 import Footer from "./components/layout/footer/footer.jsx";
 import Home from "./pages/home/home.jsx";
@@ -18,7 +18,9 @@ import Register from "./pages/register/register.jsx";
 import Reset from "./pages/reset/reset.jsx";
 import Category from "./pages/category/category.jsx";
 import Dashboard from "./pages/dashboard/dashboard.jsx";
-import AdminDashboard from "./pages/admindashboard/admindashboard.jsx"; // Example admin dashboard
+import Profile from "./pages/profile/profile.jsx";
+import ChangePassword from "./pages/changepassword/changepassword.jsx";
+import AnimatedCursor from "react-animated-cursor"
 import "./main.css";
 
 const applyDefaultTheme = () => {
@@ -41,67 +43,65 @@ const applyDefaultTheme = () => {
 
 applyDefaultTheme();
 
-/**
- * ProtectedRoute Component for Auth and Role Checks
- */
-const ProtectedRoute = ({ element, allowedRoles }) => {
-  const { isLoggedIn, role } = useSelector((state) => state.auth); // Replace `auth` with your Redux slice name
-
-  // Check if the user is logged in
-  if (!isLoggedIn) return <Navigate to="/login" />;
-
-  // Check if the user role is authorized for the route
-  if (allowedRoles && !allowedRoles.includes(role)) {
-    return <Navigate to="/unauthorized" />;
-  }
-
-  // Render the component if all checks pass
-  return element;
-};
-
 createRoot(document.getElementById("budgetApp")).render(
   <StrictMode>
+    <AnimatedCursor
+      innerSize={8}
+      outerSize={35}
+      innerScale={1}
+      outerScale={2}
+      outerAlpha={0}
+      hasBlendMode={true}
+      innerStyle={{
+        backgroundColor: 'var(--cursor-color)'
+      }}
+      outerStyle={{
+        border: '3px solid var(--cursor-color)'
+      }}
+      clickables={[
+        'a',
+        'input[type="text"]',
+        'input[type="password"]',
+        'input[type="textarea"]',
+        'input[type="email"]',
+        'input[type="number"]',
+        'input[type="submit"]',
+        'input[type="image"]',
+        'label[for]',
+        'select',
+        'textarea',
+        'button',
+        '.link',
+        {
+          target: '.custom',
+          options: {
+            innerSize: 12,
+            outerSize: 12,
+            color: '255, 255, 255',
+            outerAlpha: 0.3,
+            innerScale: 0.7,
+            outerScale: 5
+          }
+        }
+      ]}
+    />
+
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Router>
           <Header />
+
           <main className="h-85v bg-bgColor dark:bg-darkBgColor text-textColor dark:text-darkTextColor px-4 flex justify-center">
             <Routes>
-              {/* Public Routes */}
               <Route path="/" element={<Navigate to="/home" />} />
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/reset" element={<Reset />} />
-
-              {/* Protected Routes */}
-              <Route
-                path="/category"
-                element={
-                  <ProtectedRoute
-                    element={<Category />}
-                    allowedRoles={["ACCOUNT_HOLDER"]}
-                  />
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute
-                    element={<Dashboard />}
-                    allowedRoles={["ACCOUNT_HOLDER"]}
-                  />
-                }
-              />
-              <Route
-                path="/admin-dashboard"
-                element={
-                  <ProtectedRoute
-                    element={<AdminDashboard />}
-                    allowedRoles={["ADMIN"]}
-                  />
-                }
-              />
+              <Route path="/category" element={<Category />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/changepassword" element={<ChangePassword />} />
             </Routes>
           </main>
           <Footer />
