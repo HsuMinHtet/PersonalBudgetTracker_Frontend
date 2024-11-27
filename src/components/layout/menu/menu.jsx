@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowDown2 } from "iconsax-react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
@@ -9,6 +10,7 @@ function menu() {
   const { userEmail, isLoggedIn } = useSelector((state) => state.auth);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);

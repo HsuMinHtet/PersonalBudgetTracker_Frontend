@@ -1,10 +1,15 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/common";
 import InputText from "../../components/common/InputText";
 import resetImg from "../../assets/img/reset-img.svg";
+import { AUTH_ENDPOINTS } from "../../config/apiConfig";
+import axios from "axios";
 
-function register() {
+function Reset() {
   const navigate = useNavigate();
-  const [email] = useState("");
+  const [email, setUsername] = useState("");
+
   const handleReset = (e) => {
     e.preventDefault(); // Prevent the default form submission
     resetPassword(email);
@@ -14,17 +19,16 @@ function register() {
       alert("Please enter a valid email address.");
       return;
     }
-    console.log("<<<<<I am here for testing>>>>>>");
+    console.log(AUTH_ENDPOINTS.FORGOT_PASSWORD);
     axios
-      .post(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
-        email,
-      })
+      .post(AUTH_ENDPOINTS.FORGOT_PASSWORD, { email })
       .then((response) => {
+        console.log("Response:", response.data); // Log response data
         alert("Password reset link sent to your email.");
         navigate("/login");
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Error response:", error.response); // Log detailed error response
         alert("Invalid email!");
       });
   };
@@ -43,14 +47,23 @@ function register() {
             labelFor="userEmail"
             labelName="Email"
             inputId="email"
-            name="email"
+            inputName="email"
             placeholder="Enter Email"
+            value={email} // Bind the username input to state
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
           />
-          <Button text="Reset" variant="primary" tailwindClass="w-full mt-12" />
+          <Button
+            type="submit"
+            text="Reset"
+            variant="primary"
+            tailwindClass="w-full mt-12"
+          />
         </form>
       </div>
     </div>
   );
 }
 
-export default register;
+export default Reset;
