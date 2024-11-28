@@ -17,9 +17,16 @@ function Category() {
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.auth);
   const [categoryList, setCategoryList] = useState([]);
+  //edit
   const token = sessionStorage.getItem("token");
+  const [categoryName, setCategoryName] = useState("");
+  const [description, setDescription] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  //add
+  const [categoryNameAdd, setCategoryNameAdd] = useState("");
+  const [descriptionAdd, setDescriptionAdd] = useState("");
 
-  const columns = ["No", "Category Name", "Description"];
+  const columns = ["No", "CategoryName", "Description"];
 
   // Fetch data from API
   const fetchData = async () => {
@@ -43,7 +50,6 @@ function Category() {
         },
       });
       setCategoryList(response.data);
-      console.log("Fetched Categories:", response.data);
     } catch (error) {
       console.error(
         "Error fetching Categories:",
@@ -56,11 +62,38 @@ function Category() {
     fetchData();
   }, [userId, token]);
 
-  const handleEdit = (row) => {
-    console.log("Edit clicked for:", row);
-    // Add navigation or modal logic for editing
+  //update
+  const handleEdit = async (row) => {
+    setCategoryName(row.CategoryName);
+    setDescription(row.Description);
+    setCategoryId(row.ID);
+    openModal();
   };
 
+  const editCategory = async (event) => {
+    event.preventDefault();
+    const updateCategory = {
+      name: categoryName,
+      description,
+    };
+    const updateUrl = CATEGORY_ENDPOINTS.PUT_CAT_ID(categoryId);
+    console.log("update API URL:", updateUrl);
+    try {
+      await axios.put(updateUrl, updateCategory, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Category updated successfully!");
+      closeModal();
+      fetchData();
+    } catch (error) {
+      console.error("Error updating category:", error);
+      alert("Failed to update category. Please try again.");
+    }
+  };
+
+  //delete
   const handleDelete = async (row) => {
     const deleteUrl = CATEGORY_ENDPOINTS.DEL_CAT_ID(row.ID);
     console.log("API URL:", deleteUrl);
@@ -79,12 +112,32 @@ function Category() {
     }
   };
 
-  const actions = [
-    { icon: <Edit />, type: "edit", onClick: handleEdit },
-    { icon: <Trash />, type: "delete", onClick: handleDelete },
-  ];
+  //addCategory
+  const addCategory = async (event) => {
+    event.preventDefault();
+    const addCategory = {
+      name: categoryNameAdd,
+      description: descriptionAdd,
+      accountHolder_id: userId,
+    };
+    const postUrl = CATEGORY_ENDPOINTS.POST_CAT;
+    console.log("POST_API URL:", postUrl);
+    try {
+      await axios.post(postUrl, addCategory, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Category added successfully!");
+      closeModalAdd();
+      fetchData();
+    } catch (error) {
+      console.error("Error adding category:", error);
+      alert("Failed to add new category. Please try again.");
+    }
+  };
 
-  // Modal State
+  // Modal State Edit
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -93,6 +146,24 @@ function Category() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const actions = [
+    { icon: <Edit />, type: "edit", onClick: handleEdit },
+    { icon: <Trash />, type: "delete", onClick: handleDelete },
+  ];
+
+  // Modal State Add
+  const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
+
+  const openModalAdd = () => {
+    setIsModalOpenAdd(true);
+  };
+
+  const closeModalAdd = () => {
+    setCategoryNameAdd("");
+    setDescriptionAdd("");
+    setIsModalOpenAdd(false);
   };
 
   return (
@@ -116,7 +187,7 @@ function Category() {
         <h1 className="font-medium text-xl">Categories</h1>
         <Button
           text="Add Category"
-          onClick={openModal}
+          onClick={openModalAdd}
           variant="primary"
           tailwindClass="w-full"
         />
@@ -128,7 +199,7 @@ function Category() {
           data={categoryList.map((category, index) => ({
             No: index + 1,
             ID: category.id,
-            "Category Name": category.name,
+            CategoryName: category.name,
             Description: category.description,
           }))}
           actions={actions}
@@ -142,26 +213,80 @@ function Category() {
         onClose={closeModal}
         tailwindClass="bg-cardBg dark:bg-darkCardBg p-16"
       >
+        <h1 className="font-black text-2xl mb-12">Edit Category</h1>
+        <form onSubmit={editCategory}>
+          <InputText
+            type="text"
+            labelFor="categoryName"
+            labelName="Category Name"
+            inputId="categoryName"
+            name="Category Name"
+            placeholder="Enter category name"
+            value={categoryName}
+            onChange={(e) => {
+              setCategoryName(e.target.value);
+            }}
+          />
+          <InputText
+            type="text"
+            labelFor="description"
+            labelName="Description"
+            inputId="description"
+            name="description Name"
+            placeholder="Enter Description"
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+          />
+
+          <Button
+            type="submit"
+            text="Edit"
+            variant="primary"
+            tailwindClass="w-full mt-12"
+          />
+        </form>
+      </Modal>
+      <Modal
+        isOpen={isModalOpenAdd}
+        onClose={closeModalAdd}
+        tailwindClass="bg-cardBg dark:bg-darkCardBg p-16"
+      >
         <h1 className="font-black text-2xl mb-12">Add Category</h1>
+        <form onSubmit={addCategory}>
+          <InputText
+            type="text"
+            labelFor="categoryNameAdd"
+            labelName="Category Name"
+            inputId="categoryNameAdd"
+            name="Category Name"
+            placeholder="Enter category name"
+            value={categoryNameAdd}
+            onChange={(e) => {
+              setCategoryNameAdd(e.target.value);
+            }}
+          />
+          <InputText
+            type="text"
+            labelFor="descriptionAdd"
+            labelName="Description"
+            inputId="descriptionAdd"
+            name="description Name"
+            placeholder="Enter Description"
+            value={descriptionAdd}
+            onChange={(e) => {
+              setDescriptionAdd(e.target.value);
+            }}
+          />
 
-        <p className="text-textColor dark:text-darkTextColor">
-          Select Category Type
-        </p>
-        <CardSelect
-          name="Select Category Type"
-          onChange={(value) => console.log("Selected:", value)}
-        />
-
-        <InputText
-          type="text"
-          labelFor="categoryName"
-          labelName="Category Name"
-          inputId="categoryName"
-          name="Category Name"
-          placeholder="Enter category name"
-        />
-
-        <Button text="Add " variant="primary" tailwindClass="w-full mt-12" />
+          <Button
+            type="submit"
+            text="Add"
+            variant="primary"
+            tailwindClass="w-full mt-12"
+          />
+        </form>
       </Modal>
     </div>
   );
