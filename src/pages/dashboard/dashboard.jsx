@@ -8,8 +8,10 @@ import {
 } from "../../components/common";
 import dashboardImg from "../../assets/img/dashboard-img.svg";
 import { Edit, Trash } from "iconsax-react";
+import { useNavigate } from "react-router-dom";
 
 function dashboard() {
+  const navigate = useNavigate();
   const columns = ["No", "Categories", "Type"];
   const data = [
     { No: "1", Categories: "Salary", Type: "Income" },
@@ -38,6 +40,10 @@ function dashboard() {
   //Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  //Add Category button click
+  const addCategory = () => {
+    navigate("/category");
+  };
   //Add Transaction button click
   const openModal = () => {
     setIsModalOpen(true);
@@ -71,12 +77,20 @@ function dashboard() {
 
       <div className="flex items-center justify-between flex-row max-w-screen-lg px-4">
         <h1 className="font-medium text-xl">Transitions</h1>
-        <Button
-          text="Add Transition"
-          onClick={openModal}
-          variant="primary"
-          tailwindClass="w-full"
-        />
+        <div className="flex items-center justify-between flex-row max-w-screen-lg px-4">
+          <Button
+            text="Categories"
+            onClick={addCategory}
+            variant="primary"
+            tailwindClass="w-full"
+          />
+          <Button
+            text="Add Transition"
+            onClick={openModal}
+            variant="primary"
+            tailwindClass="w-full"
+          />
+        </div>
       </div>
 
       <div className="flex items-center justify-center flex-row max-w-screen-lg px-4">

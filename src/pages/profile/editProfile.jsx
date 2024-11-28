@@ -1,12 +1,17 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, InputText, InputPassword } from "../../components/common";
 import registerImg from "../../assets/img/register-img.svg";
-import { AUTH_ENDPOINTS } from "../../config/apiConfig";
+import { ACCOUNT_HOLDER_ENDPOINTS } from "../../config/apiConfig";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
-function editProfile() {
+function EditProfile() {
   const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
+  const { userId, role } = useSelector((state) => state.auth);
+
+  // State for form inputs
   const [name, setName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPhone, setUserPhone] = useState("");
@@ -18,122 +23,97 @@ function editProfile() {
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
 
-  const handleRegister = (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    validation(
+  // Fetch profile data
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!token || !userId) {
+        console.error("Missing token or userId!");
+        return;
+      }
+      try {
+        const response = await axios.get(
+          ACCOUNT_HOLDER_ENDPOINTS.GET_PROFILE(userId),
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        // Prepopulate form fields
+        setName(response.data.name || "");
+        setUserEmail(response.data.email || "");
+        setUserPhone(response.data.phone || "");
+        setUserPassword("Default@1234");
+        setCity(response.data.addressResponseDTO?.city || "");
+        setStreet(response.data.addressResponseDTO?.street || "");
+        setHomeNumber(response.data.addressResponseDTO?.number || "");
+        setPostalCode(response.data.addressResponseDTO?.postalCode || "");
+        setState(response.data.addressResponseDTO?.state || "");
+        setCountry(response.data.addressResponseDTO?.country || "");
+      } catch (error) {
+        console.error(
+          "Error fetching profile:",
+          error.response?.data || error.message
+        );
+      }
+    };
+    fetchProfile();
+  }, [userId, token]);
+
+  // Handle form submission
+  const handleRegister = async (event) => {
+    event.preventDefault();
+
+    // Validate inputs
+    if (
+      !validation(
+        name,
+        userPhone,
+        city,
+        street,
+        homeNumber,
+        postalCode,
+        state,
+        country
+      )
+    ) {
+      return;
+    }
+
+    const updatedProfile = {
       name,
-      userEmail,
-      userPhone,
-      userPassword,
-      city,
-      street,
-      homeNumber,
-      postalCode,
-      state,
-      country
-    );
+      email: userEmail,
+      phone: userPhone,
+      password: userPassword,
+      role: role,
+      addressRequestDTO: {
+        city,
+        street,
+        number: homeNumber,
+        postalCode,
+        state,
+        country,
+      },
+    };
+
+    try {
+      const response = await axios.put(
+        ACCOUNT_HOLDER_ENDPOINTS.UPDATE_PROFILE(userId),
+        updatedProfile,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert("Profile updated successfully!");
+      navigate("/profile");
+    } catch (error) {
+      console.error(
+        "Error updating profile:",
+        error.response?.data || error.message
+      );
+      alert("Failed to update profile. Please try again.");
+    }
   };
 
   const validation = (
     name,
-    userEmail,
-    userPhone,
-    userPassword,
-    city,
-    street,
-    homeNumber,
-    postalCode,
-    state,
-    country
-  ) => {
-    // Basic validation for empty fields
-    if (
-      !name ||
-      !userEmail ||
-      !userPhone ||
-      !userPassword ||
-      !city ||
-      !street ||
-      !homeNumber ||
-      !postalCode ||
-      !state ||
-      !country
-    ) {
-      alert("All fields are mandatory to register your account.");
-      return;
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userEmail)) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-
-    // Phone number validation
-    const phoneRegex = /^\d{10}$/; // Adjust regex based on your country/format
-    if (!phoneRegex.test(userPhone)) {
-      alert("Please enter a valid 10-digit phone number.");
-      return;
-    }
-
-    // Password validation
-    const passwordRegex =
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const passwordMinLength = 8;
-    const passwordMaxLength = 12;
-
-    if (userPassword.length < passwordMinLength) {
-      alert(`Password must be at least ${passwordMinLength} characters long.`);
-      return;
-    }
-
-    if (userPassword.length > passwordMaxLength) {
-      alert(`Password must not exceed ${passwordMaxLength} characters.`);
-      return;
-    }
-
-    if (!passwordRegex.test(userPassword)) {
-      alert(
-        `Password must be between ${passwordMinLength}-${passwordMaxLength} characters, 
-    and include at least one uppercase letter, one lowercase letter, one number, 
-    and one special character (@$!%*?&).`
-      );
-      return;
-    }
-
-    // Postal code validation
-    const postalCodeRegex = /^\d{5}(-\d{4})?$/; // US ZIP code format, adjust as needed
-    if (!postalCodeRegex.test(postalCode)) {
-      alert("Please enter a valid postal code.");
-      return;
-    }
-
-    // Additional validations (optional)
-    if (name.trim().length < 3) {
-      alert("Name must be at least 3 characters long.");
-      return;
-    }
-
-    registerAccount(
-      name,
-      userEmail,
-      userPhone,
-      userPassword,
-      city,
-      street,
-      homeNumber,
-      postalCode,
-      state,
-      country
-    );
-  };
-
-  const registerAccount = (
-    name,
-    email,
     phone,
-    password,
     city,
     street,
     number,
@@ -141,31 +121,31 @@ function editProfile() {
     state,
     country
   ) => {
-    console.log(AUTH_ENDPOINTS.REGISTER);
-    const role = "ACCOUNT_HOLDER";
-    axios
-      .post(AUTH_ENDPOINTS.REGISTER, {
-        name,
-        phone,
-        password,
-        email,
-        role,
-        city,
-        street,
-        number,
-        postalCode,
-        country,
-        state,
-      })
-      .then((response) => {
-        alert("CUSTOMER CREATED SUCCESSFULLY!");
-        navigate("/login");
-      })
-      .catch((error) => {
-        if (error.response.status === 500) {
-          alert("EMAIL ALREADY IN USE!");
-        }
-      });
+    if (
+      !name ||
+      !phone ||
+      !city ||
+      !street ||
+      !number ||
+      !postalCode ||
+      !state ||
+      !country
+    ) {
+      alert("All fields are mandatory to register your account.");
+      return false;
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+      alert("Please enter a valid 10-digit phone number.");
+      return false;
+    }
+
+    if (!/^\d{5}(-\d{4})?$/.test(postalCode)) {
+      alert("Invalid postal code format.");
+      return false;
+    }
+
+    return true;
   };
 
   return (
@@ -185,48 +165,22 @@ function editProfile() {
               labelName="Name"
               inputId="name"
               inputName="name"
-              placeholder="Enter Your Name"
+              placeholder="Enter Name"
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
               }}
             />
             <InputText
-              type="email"
-              labelFor="userEmail"
-              labelName="Email"
-              inputId="userEmail"
-              name="Email"
-              placeholder="Enter Email"
-              value={userEmail}
-              onChange={(e) => {
-                setUserEmail(e.target.value);
-              }}
-            />
-          </div>
-          <div className="flex items-center justify-center flex-row">
-            <InputText
               type="text"
               labelFor="userPhone"
               labelName="Phone"
               inputId="userPhone"
-              name="Phone"
+              inputName="userPhone"
               placeholder="Enter Phone"
               value={userPhone}
               onChange={(e) => {
                 setUserPhone(e.target.value);
-              }}
-            />
-            <InputPassword
-              type="password"
-              labelFor="userPassword"
-              labelName="Password"
-              inputId="userPassword"
-              name="Password"
-              placeholder="Enter Password"
-              value={userPassword}
-              onChange={(e) => {
-                setUserPassword(e.target.value);
               }}
             />
           </div>
@@ -320,4 +274,4 @@ function editProfile() {
   );
 }
 
-export default editProfile;
+export default EditProfile;
