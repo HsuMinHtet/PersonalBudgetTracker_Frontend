@@ -59,7 +59,7 @@ function menu() {
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 shadow-md rounded-md z-50">
               <Link
-                to="/change-password"
+                to="/changepassword"
                 className="m-2 color-textColor hover:text-primaryTextColor hover:dark:text-darkPrimaryTextColor"
               >
                 Change Password

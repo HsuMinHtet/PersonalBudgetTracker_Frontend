@@ -19,8 +19,9 @@ import Reset from "./pages/reset/reset.jsx";
 import Category from "./pages/category/category.jsx";
 import Dashboard from "./pages/dashboard/dashboard.jsx";
 import Profile from "./pages/profile/profile.jsx";
+import EditProfile from "./pages/profile/editProfile.jsx";
 import ChangePassword from "./pages/changepassword/changepassword.jsx";
-import AnimatedCursor from "react-animated-cursor"
+import AnimatedCursor from "react-animated-cursor";
 import "./main.css";
 
 const applyDefaultTheme = () => {
@@ -53,13 +54,13 @@ createRoot(document.getElementById("budgetApp")).render(
       outerAlpha={0}
       hasBlendMode={true}
       innerStyle={{
-        backgroundColor: 'var(--cursor-color)'
+        backgroundColor: "var(--cursor-color)",
       }}
       outerStyle={{
-        border: '3px solid var(--cursor-color)'
+        border: "3px solid var(--cursor-color)",
       }}
       clickables={[
-        'a',
+        "a",
         'input[type="text"]',
         'input[type="password"]',
         'input[type="textarea"]',
@@ -67,22 +68,22 @@ createRoot(document.getElementById("budgetApp")).render(
         'input[type="number"]',
         'input[type="submit"]',
         'input[type="image"]',
-        'label[for]',
-        'select',
-        'textarea',
-        'button',
-        '.link',
+        "label[for]",
+        "select",
+        "textarea",
+        "button",
+        ".link",
         {
-          target: '.custom',
+          target: ".custom",
           options: {
             innerSize: 12,
             outerSize: 12,
-            color: '255, 255, 255',
+            color: "255, 255, 255",
             outerAlpha: 0.3,
             innerScale: 0.7,
-            outerScale: 5
-          }
-        }
+            outerScale: 5,
+          },
+        },
       ]}
     />
 
@@ -101,6 +102,7 @@ createRoot(document.getElementById("budgetApp")).render(
               <Route path="/category" element={<Category />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/edit-profile" element={<EditProfile />} />
               <Route path="/changepassword" element={<ChangePassword />} />
             </Routes>
           </main>
