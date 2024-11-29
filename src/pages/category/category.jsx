@@ -10,40 +10,32 @@ import categoryImg from "../../assets/img/category-img.svg";
 import { Edit, Trash } from "iconsax-react";
 import { CATEGORY_ENDPOINTS } from "../../config/apiConfig";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function Category() {
-  const navigate = useNavigate();
   const { userId } = useSelector((state) => state.auth);
-  const [categoryList, setCategoryList] = useState([]);
-  //edit
   const token = sessionStorage.getItem("token");
-  const [categoryName, setCategoryName] = useState("");
-  const [description, setDescription] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  //add
-  const [categoryNameAdd, setCategoryNameAdd] = useState("");
-  const [descriptionAdd, setDescriptionAdd] = useState("");
+
+  const [categoryList, setCategoryList] = useState([]);
+  const [formState, setFormState] = useState({
+    categoryName: "",
+    description: "",
+    categoryId: null,
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
 
   const columns = ["No", "CategoryName", "Description"];
 
   // Fetch data from API
   const fetchData = async () => {
-    if (!token) {
-      console.error("Token is missing! Please log in.");
+    if (!token || !userId) {
+      console.error("Missing token or userId!");
       return;
     }
-    if (!userId) {
-      console.error("User ID is missing!");
-      return;
-    }
-
-    const apiUrl = CATEGORY_ENDPOINTS.GET_ALL_CAT;
-    console.log("API URL:", apiUrl);
 
     try {
-      const response = await axios.get(apiUrl, {
+      const response = await axios.get(CATEGORY_ENDPOINTS.GET_ALL_CAT, {
         headers: {
           Authorization: `Bearer ${token}`,
           accountHolder_id: userId,
@@ -57,33 +49,35 @@ function Category() {
       );
     }
   };
-  //initial fetch
+
   useEffect(() => {
     fetchData();
   }, [userId, token]);
 
-  //update
-  const handleEdit = async (row) => {
-    setCategoryName(row.CategoryName);
-    setDescription(row.Description);
-    setCategoryId(row.ID);
-    openModal();
+  // Handle Edit Action
+  const handleEdit = (row) => {
+    setFormState({
+      categoryName: row.CategoryName,
+      description: row.Description,
+      categoryId: row.ID,
+    });
+    setIsModalOpen(true);
   };
 
   const editCategory = async (event) => {
     event.preventDefault();
-    const updateCategory = {
-      name: categoryName,
-      description,
-    };
-    const updateUrl = CATEGORY_ENDPOINTS.PUT_CAT_ID(categoryId);
-    console.log("update API URL:", updateUrl);
+    const { categoryName, description, categoryId } = formState;
+
     try {
-      await axios.put(updateUrl, updateCategory, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.put(
+        CATEGORY_ENDPOINTS.PUT_CAT_ID(categoryId),
+        { name: categoryName, description },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert("Category updated successfully!");
       closeModal();
       fetchData();
@@ -93,12 +87,10 @@ function Category() {
     }
   };
 
-  //delete
+  // Handle Delete Action
   const handleDelete = async (row) => {
-    const deleteUrl = CATEGORY_ENDPOINTS.DEL_CAT_ID(row.ID);
-    console.log("API URL:", deleteUrl);
     try {
-      await axios.delete(deleteUrl, {
+      await axios.delete(CATEGORY_ENDPOINTS.DEL_CAT_ID(row.ID), {
         headers: {
           Authorization: `Bearer ${token}`,
           accountHolder_id: userId,
@@ -112,22 +104,25 @@ function Category() {
     }
   };
 
-  //addCategory
+  // Handle Add Category
   const addCategory = async (event) => {
     event.preventDefault();
-    const addCategory = {
-      name: categoryNameAdd,
-      description: descriptionAdd,
-      accountHolder_id: userId,
-    };
-    const postUrl = CATEGORY_ENDPOINTS.POST_CAT;
-    console.log("POST_API URL:", postUrl);
+    const { categoryName, description } = formState;
+
     try {
-      await axios.post(postUrl, addCategory, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      await axios.post(
+        CATEGORY_ENDPOINTS.POST_CAT,
+        {
+          name: categoryName,
+          description,
+          accountHolder_id: userId,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert("Category added successfully!");
       closeModalAdd();
       fetchData();
@@ -137,33 +132,23 @@ function Category() {
     }
   };
 
-  // Modal State Edit
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   const actions = [
     { icon: <Edit />, type: "edit", onClick: handleEdit },
     { icon: <Trash />, type: "delete", onClick: handleDelete },
   ];
 
-  // Modal State Add
-  const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
-
-  const openModalAdd = () => {
-    setIsModalOpenAdd(true);
+  const closeModal = () => {
+    setFormState({ categoryName: "", description: "", categoryId: null });
+    setIsModalOpen(false);
   };
 
   const closeModalAdd = () => {
-    setCategoryNameAdd("");
-    setDescriptionAdd("");
+    setFormState({ categoryName: "", description: "" });
     setIsModalOpenAdd(false);
+  };
+
+  const handleInputChange = (field, value) => {
+    setFormState((prevState) => ({ ...prevState, [field]: value }));
   };
 
   return (
@@ -187,7 +172,7 @@ function Category() {
         <h1 className="font-medium text-xl">Categories</h1>
         <Button
           text="Add Category"
-          onClick={openModalAdd}
+          onClick={() => setIsModalOpenAdd(true)}
           variant="primary"
           tailwindClass="w-full"
         />
@@ -220,26 +205,19 @@ function Category() {
             labelFor="categoryName"
             labelName="Category Name"
             inputId="categoryName"
-            name="Category Name"
             placeholder="Enter category name"
-            value={categoryName}
-            onChange={(e) => {
-              setCategoryName(e.target.value);
-            }}
+            value={formState.categoryName}
+            onChange={(e) => handleInputChange("categoryName", e.target.value)}
           />
           <InputText
             type="text"
             labelFor="description"
             labelName="Description"
             inputId="description"
-            name="description Name"
             placeholder="Enter Description"
-            value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
+            value={formState.description}
+            onChange={(e) => handleInputChange("description", e.target.value)}
           />
-
           <Button
             type="submit"
             text="Edit"
@@ -248,6 +226,7 @@ function Category() {
           />
         </form>
       </Modal>
+
       <Modal
         isOpen={isModalOpenAdd}
         onClose={closeModalAdd}
@@ -260,26 +239,19 @@ function Category() {
             labelFor="categoryNameAdd"
             labelName="Category Name"
             inputId="categoryNameAdd"
-            name="Category Name"
             placeholder="Enter category name"
-            value={categoryNameAdd}
-            onChange={(e) => {
-              setCategoryNameAdd(e.target.value);
-            }}
+            value={formState.categoryName}
+            onChange={(e) => handleInputChange("categoryName", e.target.value)}
           />
           <InputText
             type="text"
             labelFor="descriptionAdd"
             labelName="Description"
             inputId="descriptionAdd"
-            name="description Name"
             placeholder="Enter Description"
-            value={descriptionAdd}
-            onChange={(e) => {
-              setDescriptionAdd(e.target.value);
-            }}
+            value={formState.description}
+            onChange={(e) => handleInputChange("description", e.target.value)}
           />
-
           <Button
             type="submit"
             text="Add"

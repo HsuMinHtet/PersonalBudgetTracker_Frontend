@@ -38,13 +38,13 @@ const inputText = ({
 
 inputText.propTypes = {
   labelFor: PropTypes.node,
-  type: PropTypes.oneOf(["text", "password", "email", "number"]),
+  type: PropTypes.oneOf(["text", "password", "email", "number", "date"]),
   labelName: PropTypes.node,
   variant: PropTypes.oneOf(["primary", "secondary", "danger"]),
   inputId: PropTypes.node,
   inputName: PropTypes.node,
   placeholder: PropTypes.node,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
   readOnly: PropTypes.bool,
 };

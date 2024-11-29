@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "./select.module.css";
 import incomeImg from "../../../assets/img/income-img.svg";
 import expenseImg from "../../../assets/img/expense-img.svg";
 
-const CardSelect = ({ name, onChange }) => {
-  const [selected, setSelected] = useState(null);
+const CardSelect = ({ name, onChange, defaultValue }) => {
+  const [selected, setSelected] = useState(defaultValue || null);
+
+  useEffect(() => {
+    if (defaultValue && selected !== defaultValue) {
+      setSelected(defaultValue);
+      onChange(defaultValue); // Trigger onChange for default value
+    }
+  }, [defaultValue, selected, onChange]);
 
   const handleSelect = (value) => {
     setSelected(value);
@@ -15,13 +22,13 @@ const CardSelect = ({ name, onChange }) => {
   const options = [
     {
       label: "Income",
-      value: "income",
+      value: "INCOME",
       image: incomeImg,
       bgColor: "#D2F091",
     },
     {
       label: "Expense",
-      value: "expense",
+      value: "EXPENSE",
       image: expenseImg,
       bgColor: "#FCECBF",
     },
@@ -63,8 +70,9 @@ const CardSelect = ({ name, onChange }) => {
 };
 
 CardSelect.propTypes = {
-  name: PropTypes.string.isRequired, // Name for the radio input group
-  onChange: PropTypes.func.isRequired, // Callback when a selection is made
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  defaultValue: PropTypes.string,
 };
 
 export default CardSelect;
