@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Button, Table, InputText, CardSelect, Modal } from '../../components/common';
+import {
+  Button,
+  Table,
+  InputText,
+  CardSelect,
+  Modal,
+} from "../../components/common";
 import dashboardImg from "../../assets/img/dashboard-img.svg";
 import { Edit, Trash } from "iconsax-react";
 

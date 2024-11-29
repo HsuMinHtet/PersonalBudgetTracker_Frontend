@@ -102,6 +102,9 @@ function Dashboard() {
       categoryId,
       transactionId,
     } = formState;
+    if (!validation(amount, transactionDate, type, categoryId)) {
+      return;
+    }
     try {
       await axios.put(
         TRANSACTION_ENDPOINTS.PUT_TRAN_ID(transactionId),
@@ -143,6 +146,9 @@ function Dashboard() {
     event.preventDefault();
     const { amount, description, transactionDate, type, categoryId } =
       addformState;
+    if (!validation(amount, transactionDate, type, categoryId)) {
+      return;
+    }
     try {
       await axios.post(
         TRANSACTION_ENDPOINTS.POST_TRAN,
@@ -189,6 +195,27 @@ function Dashboard() {
     { icon: <Edit />, type: "edit", onClick: handleEdit },
     { icon: <Trash />, type: "delete", onClick: handleDelete },
   ];
+
+  //validation for Add and Edit
+  const validation = (
+    amount,
+    transactionDate,
+    type,
+    categoryId
+    //transactionId (only for edit)
+  ) => {
+    if (!amount || !transactionDate || !type || !categoryId) {
+      alert("All fields are mandatory to register.");
+      return false;
+    }
+    const numericAmount = parseFloat(amount); // Convert amount to a number
+
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      alert("Amount must be a number greater than zero.");
+      return false;
+    }
+    return true;
+  };
 
   return (
     <div className="flex flex-col">

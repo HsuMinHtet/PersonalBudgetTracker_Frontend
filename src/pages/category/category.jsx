@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Table,
-  InputText,
-  CardSelect,
-  Modal,
-} from "../../components/common";
+import { Button, Table, InputText, Modal } from "../../components/common";
 import categoryImg from "../../assets/img/category-img.svg";
 import { Edit, Trash } from "iconsax-react";
 import { CATEGORY_ENDPOINTS } from "../../config/apiConfig";
@@ -67,7 +61,9 @@ function Category() {
   const editCategory = async (event) => {
     event.preventDefault();
     const { categoryName, description, categoryId } = formState;
-
+    if (!validation(categoryName)) {
+      return;
+    }
     try {
       await axios.put(
         CATEGORY_ENDPOINTS.PUT_CAT_ID(categoryId),
@@ -108,7 +104,9 @@ function Category() {
   const addCategory = async (event) => {
     event.preventDefault();
     const { categoryName, description } = formState;
-
+    if (!validation(categoryName)) {
+      return;
+    }
     try {
       await axios.post(
         CATEGORY_ENDPOINTS.POST_CAT,
@@ -149,6 +147,15 @@ function Category() {
 
   const handleInputChange = (field, value) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
+  };
+
+  //validation for Add and Edit
+  const validation = (categoryName) => {
+    if (!categoryName) {
+      alert("Category Name is mandatory to register.");
+      return false;
+    }
+    return true;
   };
 
   return (
