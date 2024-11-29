@@ -95,8 +95,8 @@ function Category() {
       alert("Category deleted successfully!");
       fetchData();
     } catch (error) {
-      console.error("Error deleting category:", error);
-      alert("Failed to delete category. Please try again.");
+      const errorMessage = error.response?.data;
+      alert(`Failed to delete: ${errorMessage}`);
     }
   };
 

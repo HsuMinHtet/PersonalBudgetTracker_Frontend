@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux"; // Import Provider
 import { store, persistor } from "./app/store";
+import { useSelector } from "react-redux"; // To get state from Redux
 import { PersistGate } from "redux-persist/integration/react";
 import {
   BrowserRouter as Router,
@@ -21,6 +22,7 @@ import Profile from "./pages/profile/profile.jsx";
 import EditProfile from "./pages/profile/editProfile.jsx";
 import ChangePassword from "./pages/changepassword/changepassword.jsx";
 import AnimatedCursor from "react-animated-cursor";
+import AdminDashboard from "./pages/admindashboard/admindashboard.jsx";
 import "./main.css";
 
 const applyDefaultTheme = () => {
@@ -42,6 +44,21 @@ const applyDefaultTheme = () => {
 };
 
 applyDefaultTheme();
+
+/**
+ * ProtectedRoute Component for Auth and Role Checks
+ */
+const ProtectedRoute = ({ element, allowedRoles }) => {
+  const { isLoggedIn, role } = useSelector((state) => state.auth); // Replace `auth` with your Redux slice name
+  // Check if the user is logged in
+  if (!isLoggedIn) return <Navigate to="/login" />;
+  // Check if the user role is authorized for the route
+  if (allowedRoles && !allowedRoles.includes(role)) {
+    return <Navigate to="/unauthorized" />;
+  }
+  // Render the component if all checks pass
+  return element;
+};
 
 createRoot(document.getElementById("budgetApp")).render(
   <StrictMode>
@@ -98,11 +115,39 @@ createRoot(document.getElementById("budgetApp")).render(
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/reset" element={<Reset />} />
-              <Route path="/category" element={<Category />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              {/* <Route path="/category" element={<Category />} />
+              <Route path="/dashboard" element={<Dashboard />} /> */}
               <Route path="/profile" element={<Profile />} />
               <Route path="/edit-profile" element={<EditProfile />} />
               <Route path="/changepassword" element={<ChangePassword />} />
+              {/* Protected Routes */}
+              <Route
+                path="/category"
+                element={
+                  <ProtectedRoute
+                    element={<Category />}
+                    allowedRoles={["ACCOUNT_HOLDER"]}
+                  />
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute
+                    element={<Dashboard />}
+                    allowedRoles={["ACCOUNT_HOLDER"]}
+                  />
+                }
+              />
+              <Route
+                path="/admin-dashboard"
+                element={
+                  <ProtectedRoute
+                    element={<AdminDashboard />}
+                    allowedRoles={["ADMIN"]}
+                  />
+                }
+              />
             </Routes>
           </main>
           <Footer />

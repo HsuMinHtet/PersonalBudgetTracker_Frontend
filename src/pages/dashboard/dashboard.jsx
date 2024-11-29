@@ -223,8 +223,13 @@ function Dashboard() {
         <div>
           <h1 className="font-black text-2xl">Track Your Finances with Ease</h1>
           <p className="py-4 mb-4">
-            Welcome to your Budget Tracker Dashboard! Manage your financial
-            transitions seamlessly.
+            Welcome to your Budget Tracker Dashboard! Here, you can seamlessly
+            manage your financial transitions. View all your income and expenses
+            at a glance with the detailed data table. Use the ‘Add Transition’
+            button to quickly record your financial activities—whether you're
+            adding an income source or tracking an expense. The interactive
+            modal makes it simple to categorize and document every transition.
+            Take control of your finances today!
           </p>
         </div>
         <img src={dashboardImg} alt="Categories" className="h-60 w-60 p-6" />

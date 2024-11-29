@@ -150,12 +150,14 @@ function register() {
         password,
         email,
         role,
-        city,
-        street,
-        number,
-        postalCode,
-        country,
-        state,
+        addressRequestDTO: {
+          city,
+          street,
+          number,
+          postalCode,
+          country,
+          state,
+        },
       })
       .then((response) => {
         alert("CUSTOMER CREATED SUCCESSFULLY!");
