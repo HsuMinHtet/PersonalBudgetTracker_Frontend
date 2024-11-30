@@ -9,7 +9,7 @@ export const AUTH_ENDPOINTS = {
 
 //Admin Endpoints
 export const ADMIN_ENDPOINTS = {
-  GET_ACCOUNT_CRITERIA: `${API_BASE_URL}/account-holder/criteria`,
+  // GET_ACCOUNT_CRITERIA: `${API_BASE_URL}/account-holder/criteria`,
   GET_ALL_ACCOUNT: `${API_BASE_URL}/account-holder`, //ADMIN DASHBOARD
   DEL_ACCOUNT_ID: (id) => `${API_BASE_URL}/account-holder/${id}`,
 };
@@ -27,7 +27,7 @@ export const TRANSACTION_ENDPOINTS = {
   POST_TRAN: `${API_BASE_URL}/transaction`,
   PUT_TRAN_ID: (id) => `${API_BASE_URL}/transaction/${id}`,
   GET_TRAN_ID: (id) => `${API_BASE_URL}/transaction/${id}`,
-  GET_TRAN_CRITERIA: `${API_BASE_URL}/transaction/criteria`,
+  // GET_TRAN_CRITERIA: `${API_BASE_URL}/transaction/criteria`,
   DEL_TRAN_ID: (id) => `${API_BASE_URL}/transaction/${id}`,
 };
 
@@ -37,7 +37,7 @@ export const CATEGORY_ENDPOINTS = {
   POST_CAT: `${API_BASE_URL}/category`,
   PUT_CAT_ID: (id) => `${API_BASE_URL}/category/${id}`,
   GET_CAT_ID: (id) => `${API_BASE_URL}/category/${id}`,
-  GET_CAT_CRITERIA: `${API_BASE_URL}/category/criteria`,
+  //GET_CAT_CRITERIA: `${API_BASE_URL}/category/criteria`,
   DEL_CAT_ID: (id) => `${API_BASE_URL}/category/${id}`,
 };
 export default API_BASE_URL;
