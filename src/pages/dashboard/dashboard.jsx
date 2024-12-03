@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import {
   Button,
   Table,
   InputText,
+  InputTextarea,
   CardSelect,
   Modal,
+  DatePicker,
+  DropDown,
 } from "../../components/common";
 import { useNavigate } from "react-router-dom";
 import dashboardImg from "../../assets/img/dashboard-img.svg";
@@ -14,12 +15,18 @@ import { Edit, Trash } from "iconsax-react";
 import { TRANSACTION_ENDPOINTS } from "../../config/apiConfig";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import Swal from 'sweetalert2';
 
 function Dashboard() {
+  
   const { userId } = useSelector((state) => state.auth);
+  const [selectedOption, setSelectedOption] = useState("");
   const token = sessionStorage.getItem("token");
+  
   const navigate = useNavigate();
+  
   const [transactionList, setTransactionList] = useState([]);
+  
   const [formState, setFormState] = useState({
     amount: "",
     description: "",
@@ -28,6 +35,7 @@ function Dashboard() {
     categoryId: null,
     transactionId: null,
   });
+  
   const [addformState, setAddFormState] = useState({
     amount: "",
     description: "",
@@ -35,6 +43,7 @@ function Dashboard() {
     type: "",
     categoryId: null,
   });
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
 
@@ -46,11 +55,6 @@ function Dashboard() {
     "Categories",
     "Description",
   ];
-
-  // Navigate to Categories
-  const addCategory = () => {
-    navigate("/category");
-  };
 
   // Fetch data from API
   const fetchData = async () => {
@@ -92,6 +96,11 @@ function Dashboard() {
     setIsModalOpen(true);
   };
 
+  const handleDropdownChange = (option) => {
+    setSelectedOption(option);
+    console.log("Selected option:", option);
+  };
+
   const editTransaction = async (event) => {
     event.preventDefault();
     const {
@@ -115,12 +124,35 @@ function Dashboard() {
           },
         }
       );
-      alert("Transaction updated successfully!");
+      Swal.fire({
+        title: 'Success!',
+        text: 'Transaction updated successfully!',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-cardBg dark:bg-darkCardBg',
+          header: 'text-xl font-bold text-gray-700 dark:text-darkTextColor',
+          title: 'text-2xl font-semibold text-gray-800 dark:text-darkTextColor',
+          content: 'text-gray-600 dark:text-darkTextColor', 
+          
+        },
+      });
       closeModal();
       fetchData();
     } catch (error) {
       console.error("Error updating transaction:", error);
-      alert("Failed to update transaction. Please try again.");
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to update transaction. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-cardBg dark:bg-darkCardBg',
+          header: 'text-xl font-bold text-gray-700 dark:text-darkTextColor',
+          title: 'text-2xl font-semibold text-gray-800 dark:text-darkTextColor',
+          content: 'text-gray-600 dark:text-darkTextColor',
+        },
+      });
     }
   };
 
@@ -144,8 +176,9 @@ function Dashboard() {
   // Handle Add Action
   const addTransaction = async (event) => {
     event.preventDefault();
-    const { amount, description, transactionDate, type, categoryId } =
-      addformState;
+
+    const { amount, description, transactionDate, type, categoryId } = addformState;
+
     if (!validation(amount, transactionDate, type, categoryId)) {
       return;
     }
@@ -186,6 +219,7 @@ function Dashboard() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   const closeModalAdd = () => {
     setAddFormState("");
     setIsModalOpenAdd(false);
@@ -224,33 +258,25 @@ function Dashboard() {
           <h1 className="font-black text-2xl">Track Your Finances with Ease</h1>
           <p className="py-4 mb-4">
             Welcome to your Budget Tracker Dashboard! Here, you can seamlessly
-            manage your financial transitions. View all your income and expenses
-            at a glance with the detailed data table. Use the ‘Add Transition’
+            manage your financial transactions. View all your income and expenses
+            at a glance with the detailed data table. Use the ‘Add Transaction
             button to quickly record your financial activities—whether you're
             adding an income source or tracking an expense. The interactive
-            modal makes it simple to categorize and document every transition.
+            modal makes it simple to categorize and document every transaction.
             Take control of your finances today!
           </p>
         </div>
         <img src={dashboardImg} alt="Categories" className="h-60 w-60 p-6" />
       </div>
 
-      <div className="flex items-center justify-between flex-row max-w-screen-lg px-4">
-        <h1 className="font-medium text-xl">Transitions</h1>
-        <div className="flex items-center justify-between flex-row max-w-screen-lg px-4">
-          <Button
-            text="Categories"
-            onClick={addCategory}
-            variant="primary"
-            tailwindClass="w-full"
-          />
-          <Button
-            text="Add Transition"
-            onClick={() => setIsModalOpenAdd(true)}
-            variant="primary"
-            tailwindClass="w-full"
-          />
-        </div>
+      <div className="flex items-center justify-between flex-row max-w-screen-lg pl-4 pr-0">
+        <h1 className="font-medium text-xl">transactions</h1>
+        <Button
+          text="Add Transaction"
+          onClick={() => setIsModalOpenAdd(true)}
+          variant="primary"
+          tailwindClass="w-full"
+        />
       </div>
 
       <div className="flex items-center justify-center flex-row max-w-screen-lg px-4">
@@ -271,90 +297,98 @@ function Dashboard() {
           variant="primary"
         />
       </div>
+      
       {/* Edit Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
         tailwindClass="bg-cardBg dark:bg-darkCardBg p-16"
       >
-        <h1 className="font-black text-2xl mb-12">Edit Transition</h1>
-        <form onSubmit={editTransaction}>
-          <p className="text-textColor dark:text-darkTextColor">
-            Select Transition Type
-          </p>
-          {/* <CardSelect
-            name="Select Transition Type"
-            onChange={(value) => handleSelection(value)}
-          /> */}
-          <CardSelect
-            name="Select Transition Type"
-            defaultValue={formState.type || "income"} // Default to "income" if type is not set
-            onChange={(value) => handleInputChange("type", value)}
-          />
-          <InputText
-            type="number"
-            labelFor="amount"
-            labelName="Transition Amount"
-            inputId="amount"
-            name="Transition Amount"
-            placeholder="Enter amount"
-            value={formState.amount}
-            onChange={(e) => handleInputChange("amount", e.target.value)}
-          />
-          <InputText
-            type="text"
-            labelFor="category"
-            labelName="Category"
-            inputId="category"
-            name="Category"
-            placeholder="Enter Category"
-            value={formState.categoryId}
-            onChange={(e) => handleInputChange("category", e.target.value)}
-          />
-          <InputText
-            type="text"
-            labelFor="description"
-            labelName="Description"
-            inputId="description"
-            name="Description"
-            placeholder="Enter Description"
-            value={formState.description}
-            onChange={(e) => handleInputChange("description", e.target.value)}
-          />
-          {/* <InputText
-            type="date"
-            labelFor="transactionDate"
-            labelName="Transaction Date"
-            inputId="transactionDate"
-            name="Transaction Date"
-            placeholder="Enter Transaction Date"
-            value={formState.transactionDate}
-            onChange={(e) => handleInputChange("description", e.target.value)}
-          /> */}
-          <ReactDatePicker
-            selected={
-              formState.transactionDate
-                ? new Date(formState.transactionDate + "T00:00:00")
-                : null
-            }
-            onChange={(date) =>
-              handleInputChange(
-                "transactionDate",
-                date ? date.toISOString().split("T")[0] : ""
-              )
-            }
-            dateFormat="yyyy-MM-dd"
-            placeholderText="Enter Transaction Date"
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-
-          <Button
-            type="submit"
-            text="Edit"
-            variant="primary"
-            tailwindClass="w-full mt-12"
-          />
+        <h1 className="font-black text-2xl mb-12">Edit Transaction</h1>
+        <form onSubmit={editTransaction} className="flex flex-row items-baseline">
+          <div className="flex flex-col">
+            <p className="text-textColor dark:text-darkTextColor">
+              Select Transaction Type
+            </p>
+            <CardSelect
+              name="Select Transaction Type"
+              defaultValue={formState.type || "income"} // Default to "income" if type is not set
+              onChange={(value) => handleInputChange("type", value)}
+            />
+          </div>
+          <div className="flex flex-col">
+            <InputText
+              type="number"
+              labelFor="amount"
+              labelName="Transaction Amount"
+              inputId="amount"
+              name="Transaction Amount"
+              placeholder="Enter amount"
+              value={formState.amount}
+              onChange={(e) => handleInputChange("amount", e.target.value)}
+            />
+            {/* <InputText
+              type="text"
+              labelFor="category"
+              labelName="Category"
+              inputId="category"
+              name="Category"
+              placeholder="Enter Category"
+              value={formState.categoryId}
+              onChange={(e) => handleInputChange("category", e.target.value)}
+            /> */}
+            <DropDown
+              labelFor="category"
+              labelName="Category"
+              inputId="category"
+              placeholder="Select Category"
+              variant="primary"
+              ClassName="dropDownMain"
+              options={["Option 1", "Option 2", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3"]}
+              selectedValue={selectedOption}
+              onChange={handleDropdownChange}
+            />
+            <DatePicker
+              labelFor='transactionDate'
+              labelName='Transaction Date'
+              inputId='transactionDate'
+              name='Transaction Date'
+              selected={
+                formState.transactionDate
+                  ? new Date(formState.transactionDate)
+                  : null
+              }
+              onChange={(date) =>
+                handleInputChange("transactionDate", date ? date.toISOString().split("T")[0] : "")
+              }
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Enter Transaction Date"
+              className="bg-cardBg dark:bg-darkCardBg w-full p-2"
+              calendarClassName="bg-cardBg dark:bg-darkCardBg text-gray-800 rounded-lg shadow-lg z-50"
+              wrapperClassName="bg-cardBg dark:bg-darkCardBg relative"
+              popperClassName="bg-cardBg dark:bg-darkCardBg z-50"
+            />
+          </div>
+          <div className="flex flex-col">
+            <InputTextarea
+              type='textarea'
+              labelFor='description'
+              labelName='Description'
+              inputId='description'
+              name='Description'
+              placeholder="Enter Description"
+              value={formState.description}
+              onChange={(e) => handleInputChange("description", e.target.value)}
+            />
+            <Button
+              type="submit"
+              text="Update"
+              variant="primary"
+              tailwindClass="w-full mt-6"
+            />
+          </div>
         </form>
+
       </Modal>
 
       {/* Add Modal */}
@@ -363,79 +397,101 @@ function Dashboard() {
         onClose={closeModalAdd}
         tailwindClass="bg-cardBg dark:bg-darkCardBg p-16"
       >
-        <h1 className="font-black text-2xl mb-12">Add Transition</h1>
-        <form onSubmit={addTransaction}>
-          <p className="text-textColor dark:text-darkTextColor">
-            Select Transition Type
-          </p>
-          <CardSelect
-            name="Select Transition Type"
-            value={addformState.type}
-            onChange={(value) =>
-              setAddFormState((prev) => ({ ...prev, type: value }))
-            }
-          />
-          <InputText
-            type="number"
-            labelFor="amount"
-            labelName="Transition Amount"
-            inputId="amount"
-            placeholder="Enter amount"
-            value={addformState.amount || ""}
-            onChange={(e) =>
-              setAddFormState((prev) => ({ ...prev, amount: e.target.value }))
-            }
-          />
-          <InputText
-            type="text"
-            labelFor="category"
-            labelName="Category"
-            inputId="category"
-            placeholder="Enter Category"
-            value={addformState.categoryId || ""}
-            onChange={(e) =>
-              setAddFormState((prev) => ({
-                ...prev,
-                categoryId: e.target.value,
-              }))
-            }
-          />
-          <InputText
-            type="text"
-            labelFor="description"
-            labelName="Description"
-            inputId="description"
-            placeholder="Enter Description"
-            value={addformState.description || ""}
-            onChange={(e) =>
-              setAddFormState((prev) => ({
-                ...prev,
-                description: e.target.value,
-              }))
-            }
-          />
-          <ReactDatePicker
-            selected={
-              addformState.transactionDate
-                ? new Date(addformState.transactionDate + "T00:00:00")
-                : null
-            }
-            onChange={(date) =>
-              setAddFormState((prev) => ({
-                ...prev,
-                transactionDate: date ? date.toISOString().split("T")[0] : "",
-              }))
-            }
-            dateFormat="yyyy-MM-dd"
-            placeholderText="Enter Transaction Date"
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <Button
-            type="submit"
-            text="Add"
-            variant="primary"
-            tailwindClass="w-full mt-12"
-          />
+        <h1 className="font-black text-2xl mb-12">Add Transaction</h1>
+        <form onSubmit={addTransaction} className="flex flex-row items-baseline">
+            <div className="flex flex-col">
+              <p className="text-textColor dark:text-darkTextColor">
+                Transaction Type
+              </p>
+              <CardSelect
+                name="Select Transaction Type"
+                value={addformState.type}
+                onChange={(value) =>
+                  setAddFormState((prev) => ({ ...prev, type: value }))
+                }
+              />
+            </div>
+            <div className="flex flex-col">
+              <InputText
+                type="number"
+                labelFor="amount"
+                labelName="Transaction Amount"
+                inputId="amount"
+                placeholder="Enter amount"
+                value={addformState.amount || ""}
+                onChange={(e) =>
+                  setAddFormState((prev) => ({ ...prev, amount: e.target.value }))
+                }
+              />
+              {/* <InputText
+                type="text"
+                labelFor="category"
+                labelName="Category"
+                inputId="category"
+                placeholder="Enter Category"
+                value={addformState.categoryId || ""}
+                onChange={(e) =>
+                  setAddFormState((prev) => ({
+                    ...prev,
+                    categoryId: e.target.value,
+                  }))
+                }
+              /> */}
+              <DropDown
+                labelFor="category"
+                labelName="Category"
+                inputId="category"
+                placeholder="Select Category"
+                variant="primary"
+                ClassName = "dropDownMain"
+                options={["Option 1", "Option 2", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3"]}
+                selectedValue={selectedOption}
+                onChange={handleDropdownChange}
+              />
+              <DatePicker
+                labelFor='transactionDate'
+                labelName='Transaction Date'
+                inputId='transactionDate'
+                name='Transaction Date'
+                selected={
+                  addformState.transactionDate
+                    ? new Date(addformState.transactionDate)
+                    : null
+                }
+                onChange={(date) =>
+                  handleAddInputChange("transactionDate", date ? date.toISOString().split("T")[0] : "")
+                }
+                dateFormat="yyyy-MM-dd"
+                placeholderText="Enter Transaction Date"
+                className="bg-cardBg dark:bg-darkCardBg w-full p-2"
+                calendarClassName="bg-cardBg dark:bg-darkCardBg text-gray-800 rounded-lg shadow-lg z-50"
+                wrapperClassName="bg-cardBg dark:bg-darkCardBg relative"
+                popperClassName="bg-cardBg dark:bg-darkCardBg z-50"
+              />
+            </div>
+            <div className="flex flex-col">
+                <InputTextarea
+                  type='textarea'
+                  labelFor='description'
+                  labelName='Description'
+                  inputId='description'
+                  name='Description'
+                  placeholder="Enter Description"
+                  value={addformState.description || ""}
+                  onChange={(e) =>
+                    setAddFormState((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
+                />
+                <Button
+                  type="submit"
+                  text="Add"
+                  variant="primary"
+                  tailwindClass="w-full mt-6"
+                />
+            </div>
         </form>
       </Modal>
     </div>

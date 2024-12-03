@@ -1,7 +1,9 @@
 .tableContainer {
-    overflow-x: auto;
+    overflow-x: hidden;
     margin: 1rem 0;
     width: 100%;
+    height: 280px;
+    overflow-y: scroll;
 }
 
 .table {
@@ -9,6 +11,15 @@
     border-collapse: collapse;
     font-size: 1rem;
     text-align: left;
+    border: none!important;
+}
+
+thead tr{
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
 }
 
 .table th {
@@ -66,4 +77,10 @@
 .table tr {
     background: transparent;
     transition: background-color 0.3s ease;
+}
+
+.emptyImage {
+  max-width: 200px;
+  margin: 0 auto;
+  display: block;
 }

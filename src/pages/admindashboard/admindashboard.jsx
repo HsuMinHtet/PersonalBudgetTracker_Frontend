@@ -11,6 +11,7 @@ import { Edit, Trash } from "iconsax-react";
 import { ADMIN_ENDPOINTS } from "../../config/apiConfig";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import NodataImg from "../../assets/img/nodata-img.svg"
 
 function admindashboard() {
   const { role, userId } = useSelector((state) => state.auth);
@@ -110,6 +111,8 @@ function admindashboard() {
           actions={actions}
           tailwindClass="bg-cardBg dark:bg-darkCardBg"
           variant="primary"
+          nodataImg={NodataImg}
+          emptyMessage="Oooops! There is no category. You can add one!"
         />
       </div>
     </div>

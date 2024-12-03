@@ -54,7 +54,7 @@ function header() {
         ) : (
           <img src={logoLight} alt="Budget App Logo" className="h-12 w-12 " />
         )}
-        <h3 className="mx-2 font-black">Budget Tracker App</h3>
+        <h3 className="mx-2 font-black hover:text-primaryTextColor">Budget Tracker App</h3>
       </Link>
       <div className="flex items-center">
         <Menu />

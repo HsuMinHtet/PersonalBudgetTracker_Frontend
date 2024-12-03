@@ -1,0 +1,90 @@
+.datePickerWrapper {
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.5s;
+  width: fit-content;
+  position: relative;
+}
+
+.datePickerWrapper label {
+  display: block;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.datePickerWrapper input {
+  border: solid 2px #343434;
+}
+
+.datePickerWrapper:hover input {
+  border-color: #737373;
+  transition: all ease 0.5s;
+}
+
+.datePickerWrapper svg {
+  color: #737373;
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+}
+
+
+.datePickerWrapper input {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 200;
+  transition: all 0.5s;
+  outline: none;
+  display: block;
+  background-color: transparent;
+  border: solid 2px #AAAAAA;
+  width: 300px;
+  height: 38px;
+}
+
+.primary {
+  /* Styles for primary variant */
+}
+
+.success {
+  /* Styles for success variant */
+}
+
+.danger {
+  /* Styles for danger variant */
+}
+
+.customInput {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.calendar {
+  /* Customize calendar styles here */
+}
+
+.wrapper {
+  /* Wrapper around date picker */
+}
+
+.popper {
+  /* Customize popper styles */
+}
+
+
+.datePickerWrapper {
+  z-index: 10;
+}
+
+.popper {
+  z-index: 50; /* Ensure popper appears on top of other elements */
+}

@@ -8,6 +8,8 @@ const Table = ({
   variant = "primary",
   actions,
   tailwindClass = "",
+  nodataImg = null,
+  emptyMessage = "Oooops! There is no category. You can add one!",
 }) => {
   const tableClass = `${styles.table} ${styles[variant]} ${tailwindClass}`;
 
@@ -23,28 +25,43 @@ const Table = ({
           </tr>
         </thead>
         <tbody>
-          {data.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {columns.map((col, colIndex) => (
-                <td key={colIndex}>{row[col]}</td>
-              ))}
-              {actions && (
-                <td>
-                  {actions.map((action, actionIndex) => (
-                    <button
-                      key={actionIndex}
-                      onClick={() => action.onClick(row)}
-                      className={`${styles.actionButton} ${
-                        styles[action.type]
-                      }`}
-                    >
-                      {action.icon}
-                    </button>
-                  ))}
-                </td>
-              )}
+          {data.length > 0 ? (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {columns.map((col, colIndex) => (
+                  <td key={colIndex}>{row[col]}</td>
+                ))}
+                {actions && (
+                  <td className="flex flex-row">
+                    {actions.map((action, actionIndex) => (
+                      <button
+                        key={actionIndex}
+                        onClick={() => action.onClick(row)}
+                        className={`${styles.actionButton} ${styles[action.type]}`}
+                      >
+                        {action.icon}
+                      </button>
+                    ))}
+                  </td>
+                )}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={columns.length + (actions ? 1 : 0)} className={styles.emptyState}>
+                <div className={styles.emptyContainer}>
+                  {nodataImg && (
+                    <img
+                      src={nodataImg}
+                      alt="No Data"
+                      className={styles.emptyImage}
+                    />
+                  )}
+                    <p className="text-center text-xs opacity-50 p-10">{emptyMessage}</p>
+                </div>
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
@@ -63,6 +80,8 @@ Table.propTypes = {
     })
   ),
   tailwindClass: PropTypes.string,
+  nodataImg: PropTypes.string,
+  emptyMessage: PropTypes.string,
 };
 
 export default Table;
