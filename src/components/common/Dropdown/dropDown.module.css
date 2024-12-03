@@ -1,0 +1,95 @@
+.dropdownWrapper {
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.5s;
+  width: fit-content;
+  position: relative;
+}
+
+.dropdownToggle:hover {
+  transition: all 0.5s;
+}
+
+.dropdownWrapper label {
+  display: block;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.dropdownWrapper .dropdownToggle {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 200;
+  transition: all 0.5s;
+  outline: none;
+  display: block;
+  background-color: transparent;
+  border: solid 2px #AAAAAA;
+  transition: all ease 0.5s;
+  width: 300px;
+  height: 38px;
+}
+
+.dark .dropdownWrapper .dropdownToggle {
+  border: solid 2px #343434;
+}
+
+.toggleIcon {
+  color: #737373;
+  position: absolute;
+  right: 35px;
+  bottom: 17px;
+}
+
+.dark .dropdownWrapper ul {
+  background: #232323 !important;
+}
+
+.dropdownWrapper ul {
+  background: #FAFAFA;
+}
+
+.dropdownMenu {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 200;
+  transition: all 0.5s;
+  outline: none;
+  display: block;
+  background-color: transparent;
+  border: solid 2px #EEEEEE!important;
+  position: absolute;
+  z-index: 999;
+  width: 90%;
+  max-height: 130px!important;
+  overflow-y: auto;
+  border-color: #737373;
+  transition: all ease 0.5s;
+}
+
+.dropdownToggle .placeholder {
+  color: #AAAAAA;
+}
+
+.dropdownOption {
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.dropdownOption:hover {
+  color: #D2CEFA!important;
+}
+
+.dropdownOption:hover {
+  background-color: var(--hover-bg-color);
+  color: var(--hover-text-color);
+}

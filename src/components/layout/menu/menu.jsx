@@ -40,24 +40,37 @@ function menu() {
           </Link>
         </>
       ) : (
-        <div className="inline-block mx-3">
-          <div className="flex items-center" onClick={toggleDropdown}>
-            <span>Hello,</span>
+          <div className="flex flex-row mx-3">
             <Link
-              to="/profile" // Adjust this to the appropriate route for the user profile
-              className="m-2 color-textColor hover:text-primaryTextColor hover:dark:text-darkPrimaryTextColor"
+              to="/Dashboard"
+              className="mx-2 color-textColor hover:text-primaryTextColor hover:dark:text-darkPrimaryTextColor"
             >
-              {userEmail || "User Name"}
+              Dashboard
             </Link>
-            <ArrowDown2
-              size="24"
-              className="text-textColor dark:text-darkTextColor"
-              title="Dropdown Menu"
-            />
-          </div>
+            <Link
+              to="/Category"
+              className="mx-2 color-textColor hover:text-primaryTextColor hover:dark:text-darkPrimaryTextColor"
+            >
+              Category
+            </Link>
+            <div className="flex items-center ml-16" onClick={toggleDropdown}>
+              <span>Hello,</span>
+              <div className="inline mx-1 cursor-pointer">{userEmail || "User Name"}</div>
+              <ArrowDown2
+                size="20"
+                className="text-textColor dark:text-darkTextColor hover:cursor-pointer pt-1"
+                title="Dropdown Menu"
+              />
+            </div>
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 shadow-md rounded-md z-50">
+              <div className="flex flex-col absolute right-2 rounded-md drop-shadow-md mt-8 p-2 z-5 bg-cardBg dark:bg-darkCardBg">
+              <Link
+                to="/profile"
+                className="m-2 color-textColor hover:text-primaryTextColor hover:dark:text-darkPrimaryTextColor"
+              >
+                Profile
+              </Link>
               <Link
                 to="/changepassword"
                 className="m-2 color-textColor hover:text-primaryTextColor hover:dark:text-darkPrimaryTextColor"
@@ -70,12 +83,22 @@ function menu() {
               >
                 Edit Profile
               </Link>
-              <button
+              {/* <button
                 onClick={handleLogout} // Replace with your logout function
                 className="m-2 color-textColor hover:text-primaryTextColor hover:dark:text-darkPrimaryTextColor"
               >
                 Logout
-              </button>
+              </button> */}
+                <Link
+                  to="#"
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent navigation
+                    handleLogout(); // Trigger logout
+                  }}
+                  className="m-2 color-textColor hover:text-primaryTextColor hover:dark:text-darkPrimaryTextColor"
+                >
+                  Logout
+                </Link>
             </div>
           )}
         </div>

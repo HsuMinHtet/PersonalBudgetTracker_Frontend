@@ -227,7 +227,7 @@ function Category() {
           />
           <Button
             type="submit"
-            text="Edit"
+            text="Update"
             variant="primary"
             tailwindClass="w-full mt-12"
           />

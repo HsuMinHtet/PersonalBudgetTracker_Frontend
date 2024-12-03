@@ -7,3 +7,5 @@ export { default as InputPassword } from './Password';
 export { default as CardSelect } from './Select';
 export { default as Table } from './Table';
 export { default as InputTextarea } from './Textarea';
+export { default as DatePicker } from './Datepicker';
+export { default as DropDown } from './Dropdown';

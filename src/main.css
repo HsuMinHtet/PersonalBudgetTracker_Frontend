@@ -13,3 +13,11 @@ html {
 html.dark {
   --cursor-color: #FAFAFA;
 }
+
+.react-datepicker__header {
+  background-color: transparent!important;
+}
+
+* {
+  cursor: none!important;
+}
