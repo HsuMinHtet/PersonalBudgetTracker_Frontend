@@ -15,18 +15,17 @@ import { Edit, Trash } from "iconsax-react";
 import { TRANSACTION_ENDPOINTS } from "../../config/apiConfig";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 function Dashboard() {
-  
   const { userId } = useSelector((state) => state.auth);
   const [selectedOption, setSelectedOption] = useState("");
   const token = sessionStorage.getItem("token");
-  
+
   const navigate = useNavigate();
-  
+
   const [transactionList, setTransactionList] = useState([]);
-  
+
   const [formState, setFormState] = useState({
     amount: "",
     description: "",
@@ -35,7 +34,7 @@ function Dashboard() {
     categoryId: null,
     transactionId: null,
   });
-  
+
   const [addformState, setAddFormState] = useState({
     amount: "",
     description: "",
@@ -43,7 +42,7 @@ function Dashboard() {
     type: "",
     categoryId: null,
   });
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
 
@@ -125,16 +124,15 @@ function Dashboard() {
         }
       );
       Swal.fire({
-        title: 'Success!',
-        text: 'Transaction updated successfully!',
-        icon: 'success',
-        confirmButtonText: 'OK',
+        title: "Success!",
+        text: "Transaction updated successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
         customClass: {
-          popup: 'bg-cardBg dark:bg-darkCardBg',
-          header: 'text-xl font-bold text-gray-700 dark:text-darkTextColor',
-          title: 'text-2xl font-semibold text-gray-800 dark:text-darkTextColor',
-          content: 'text-gray-600 dark:text-darkTextColor', 
-          
+          popup: "bg-cardBg dark:bg-darkCardBg",
+          header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+          title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+          content: "text-gray-600 dark:text-darkTextColor",
         },
       });
       closeModal();
@@ -142,15 +140,15 @@ function Dashboard() {
     } catch (error) {
       console.error("Error updating transaction:", error);
       Swal.fire({
-        title: 'Error!',
-        text: 'Failed to update transaction. Please try again.',
-        icon: 'error',
-        confirmButtonText: 'OK',
+        title: "Error!",
+        text: "Failed to update transaction. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
         customClass: {
-          popup: 'bg-cardBg dark:bg-darkCardBg',
-          header: 'text-xl font-bold text-gray-700 dark:text-darkTextColor',
-          title: 'text-2xl font-semibold text-gray-800 dark:text-darkTextColor',
-          content: 'text-gray-600 dark:text-darkTextColor',
+          popup: "bg-cardBg dark:bg-darkCardBg",
+          header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+          title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+          content: "text-gray-600 dark:text-darkTextColor",
         },
       });
     }
@@ -176,9 +174,8 @@ function Dashboard() {
   // Handle Add Action
   const addTransaction = async (event) => {
     event.preventDefault();
-
-    const { amount, description, transactionDate, type, categoryId } = addformState;
-
+    const { amount, description, transactionDate, type, categoryId } =
+      addformState;
     if (!validation(amount, transactionDate, type, categoryId)) {
       return;
     }
@@ -258,12 +255,12 @@ function Dashboard() {
           <h1 className="font-black text-2xl">Track Your Finances with Ease</h1>
           <p className="py-4 mb-4">
             Welcome to your Budget Tracker Dashboard! Here, you can seamlessly
-            manage your financial transactions. View all your income and expenses
-            at a glance with the detailed data table. Use the ‘Add Transaction
-            button to quickly record your financial activities—whether you're
-            adding an income source or tracking an expense. The interactive
-            modal makes it simple to categorize and document every transaction.
-            Take control of your finances today!
+            manage your financial transactions. View all your income and
+            expenses at a glance with the detailed data table. Use the ‘Add
+            Transaction button to quickly record your financial
+            activities—whether you're adding an income source or tracking an
+            expense. The interactive modal makes it simple to categorize and
+            document every transaction. Take control of your finances today!
           </p>
         </div>
         <img src={dashboardImg} alt="Categories" className="h-60 w-60 p-6" />
@@ -297,7 +294,7 @@ function Dashboard() {
           variant="primary"
         />
       </div>
-      
+
       {/* Edit Modal */}
       <Modal
         isOpen={isModalOpen}
@@ -305,7 +302,10 @@ function Dashboard() {
         tailwindClass="bg-cardBg dark:bg-darkCardBg p-16"
       >
         <h1 className="font-black text-2xl mb-12">Edit Transaction</h1>
-        <form onSubmit={editTransaction} className="flex flex-row items-baseline">
+        <form
+          onSubmit={editTransaction}
+          className="flex flex-row items-baseline"
+        >
           <div className="flex flex-col">
             <p className="text-textColor dark:text-darkTextColor">
               Select Transaction Type
@@ -344,22 +344,35 @@ function Dashboard() {
               placeholder="Select Category"
               variant="primary"
               ClassName="dropDownMain"
-              options={["Option 1", "Option 2", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3"]}
+              options={[
+                "Option 1",
+                "Option 2",
+                "Option 3",
+                "Option 3",
+                "Option 3",
+                "Option 3",
+                "Option 3",
+                "Option 3",
+                "Option 3",
+              ]}
               selectedValue={selectedOption}
               onChange={handleDropdownChange}
             />
             <DatePicker
-              labelFor='transactionDate'
-              labelName='Transaction Date'
-              inputId='transactionDate'
-              name='Transaction Date'
+              labelFor="transactionDate"
+              labelName="Transaction Date"
+              inputId="transactionDate"
+              name="Transaction Date"
               selected={
                 formState.transactionDate
                   ? new Date(formState.transactionDate)
                   : null
               }
               onChange={(date) =>
-                handleInputChange("transactionDate", date ? date.toISOString().split("T")[0] : "")
+                handleInputChange(
+                  "transactionDate",
+                  date ? date.toISOString().split("T")[0] : ""
+                )
               }
               dateFormat="yyyy-MM-dd"
               placeholderText="Enter Transaction Date"
@@ -371,11 +384,11 @@ function Dashboard() {
           </div>
           <div className="flex flex-col">
             <InputTextarea
-              type='textarea'
-              labelFor='description'
-              labelName='Description'
-              inputId='description'
-              name='Description'
+              type="textarea"
+              labelFor="description"
+              labelName="Description"
+              inputId="description"
+              name="Description"
               placeholder="Enter Description"
               value={formState.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
@@ -388,7 +401,6 @@ function Dashboard() {
             />
           </div>
         </form>
-
       </Modal>
 
       {/* Add Modal */}
@@ -398,32 +410,35 @@ function Dashboard() {
         tailwindClass="bg-cardBg dark:bg-darkCardBg p-16"
       >
         <h1 className="font-black text-2xl mb-12">Add Transaction</h1>
-        <form onSubmit={addTransaction} className="flex flex-row items-baseline">
-            <div className="flex flex-col">
-              <p className="text-textColor dark:text-darkTextColor">
-                Transaction Type
-              </p>
-              <CardSelect
-                name="Select Transaction Type"
-                value={addformState.type}
-                onChange={(value) =>
-                  setAddFormState((prev) => ({ ...prev, type: value }))
-                }
-              />
-            </div>
-            <div className="flex flex-col">
-              <InputText
-                type="number"
-                labelFor="amount"
-                labelName="Transaction Amount"
-                inputId="amount"
-                placeholder="Enter amount"
-                value={addformState.amount || ""}
-                onChange={(e) =>
-                  setAddFormState((prev) => ({ ...prev, amount: e.target.value }))
-                }
-              />
-              {/* <InputText
+        <form
+          onSubmit={addTransaction}
+          className="flex flex-row items-baseline"
+        >
+          <div className="flex flex-col">
+            <p className="text-textColor dark:text-darkTextColor">
+              Transaction Type
+            </p>
+            <CardSelect
+              name="Select Transaction Type"
+              value={addformState.type}
+              onChange={(value) =>
+                setAddFormState((prev) => ({ ...prev, type: value }))
+              }
+            />
+          </div>
+          <div className="flex flex-col">
+            <InputText
+              type="number"
+              labelFor="amount"
+              labelName="Transaction Amount"
+              inputId="amount"
+              placeholder="Enter amount"
+              value={addformState.amount || ""}
+              onChange={(e) =>
+                setAddFormState((prev) => ({ ...prev, amount: e.target.value }))
+              }
+            />
+            {/* <InputText
                 type="text"
                 labelFor="category"
                 labelName="Category"
@@ -437,61 +452,74 @@ function Dashboard() {
                   }))
                 }
               /> */}
-              <DropDown
-                labelFor="category"
-                labelName="Category"
-                inputId="category"
-                placeholder="Select Category"
-                variant="primary"
-                ClassName = "dropDownMain"
-                options={["Option 1", "Option 2", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3", "Option 3"]}
-                selectedValue={selectedOption}
-                onChange={handleDropdownChange}
-              />
-              <DatePicker
-                labelFor='transactionDate'
-                labelName='Transaction Date'
-                inputId='transactionDate'
-                name='Transaction Date'
-                selected={
-                  addformState.transactionDate
-                    ? new Date(addformState.transactionDate)
-                    : null
-                }
-                onChange={(date) =>
-                  handleAddInputChange("transactionDate", date ? date.toISOString().split("T")[0] : "")
-                }
-                dateFormat="yyyy-MM-dd"
-                placeholderText="Enter Transaction Date"
-                className="bg-cardBg dark:bg-darkCardBg w-full p-2"
-                calendarClassName="bg-cardBg dark:bg-darkCardBg text-gray-800 rounded-lg shadow-lg z-50"
-                wrapperClassName="bg-cardBg dark:bg-darkCardBg relative"
-                popperClassName="bg-cardBg dark:bg-darkCardBg z-50"
-              />
-            </div>
-            <div className="flex flex-col">
-                <InputTextarea
-                  type='textarea'
-                  labelFor='description'
-                  labelName='Description'
-                  inputId='description'
-                  name='Description'
-                  placeholder="Enter Description"
-                  value={addformState.description || ""}
-                  onChange={(e) =>
-                    setAddFormState((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                />
-                <Button
-                  type="submit"
-                  text="Add"
-                  variant="primary"
-                  tailwindClass="w-full mt-6"
-                />
-            </div>
+            <DropDown
+              labelFor="category"
+              labelName="Category"
+              inputId="category"
+              placeholder="Select Category"
+              variant="primary"
+              ClassName="dropDownMain"
+              options={[
+                "Option 1",
+                "Option 2",
+                "Option 3",
+                "Option 3",
+                "Option 3",
+                "Option 3",
+                "Option 3",
+                "Option 3",
+                "Option 3",
+              ]}
+              selectedValue={selectedOption}
+              onChange={handleDropdownChange}
+            />
+            <DatePicker
+              labelFor="transactionDate"
+              labelName="Transaction Date"
+              inputId="transactionDate"
+              name="Transaction Date"
+              selected={
+                addformState.transactionDate
+                  ? new Date(addformState.transactionDate)
+                  : null
+              }
+              onChange={(date) =>
+                handleAddInputChange(
+                  "transactionDate",
+                  date ? date.toISOString().split("T")[0] : ""
+                )
+              }
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Enter Transaction Date"
+              className="bg-cardBg dark:bg-darkCardBg w-full p-2"
+              calendarClassName="bg-cardBg dark:bg-darkCardBg text-gray-800 rounded-lg shadow-lg z-50"
+              wrapperClassName="bg-cardBg dark:bg-darkCardBg relative"
+              popperClassName="bg-cardBg dark:bg-darkCardBg z-50"
+            />
+          </div>
+          <div className="flex flex-col">
+            <InputTextarea
+              type="textarea"
+              labelFor="description"
+              labelName="Description"
+              inputId="description"
+              name="Description"
+              placeholder="Enter Description"
+              value={addformState.description || ""}
+              onChange={(e) =>
+                setAddFormState((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
+            />
+            <Button
+              type="submit"
+              text="Add"
+              variant="primary"
+              tailwindClass="w-full mt-6"
+            />
+          </div>
         </form>
       </Modal>
     </div>
