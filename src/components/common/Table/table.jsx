@@ -9,7 +9,7 @@ const Table = ({
   actions,
   tailwindClass = "",
   nodataImg = null,
-  emptyMessage = "Oooops! There is no category. You can add one!",
+  emptyMessage = "Oooops! There is no data. You can add one!",
 }) => {
   const tableClass = `${styles.table} ${styles[variant]} ${tailwindClass}`;
 
@@ -37,7 +37,9 @@ const Table = ({
                       <button
                         key={actionIndex}
                         onClick={() => action.onClick(row)}
-                        className={`${styles.actionButton} ${styles[action.type]}`}
+                        className={`${styles.actionButton} ${
+                          styles[action.type]
+                        }`}
                       >
                         {action.icon}
                       </button>
@@ -48,7 +50,10 @@ const Table = ({
             ))
           ) : (
             <tr>
-              <td colSpan={columns.length + (actions ? 1 : 0)} className={styles.emptyState}>
+              <td
+                colSpan={columns.length + (actions ? 1 : 0)}
+                className={styles.emptyState}
+              >
                 <div className={styles.emptyContainer}>
                   {nodataImg && (
                     <img
@@ -57,7 +62,9 @@ const Table = ({
                       className={styles.emptyImage}
                     />
                   )}
-                    <p className="text-center text-xs opacity-50 p-10">{emptyMessage}</p>
+                  <p className="text-center text-xs opacity-50 p-10">
+                    {emptyMessage}
+                  </p>
                 </div>
               </td>
             </tr>

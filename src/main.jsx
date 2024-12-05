@@ -86,12 +86,9 @@ createRoot(document.getElementById("budgetApp")).render(
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/reset" element={<Reset />} />
-              {/* <Route path="/category" element={<Category />} />
-              <Route path="/dashboard" element={<Dashboard />} /> */}
               <Route path="/profile" element={<Profile />} />
               <Route path="/edit-profile" element={<EditProfile />} />
               <Route path="/changepassword" element={<ChangePassword />} />
-              {/* Protected Routes */}
               <Route
                 path="/category"
                 element={

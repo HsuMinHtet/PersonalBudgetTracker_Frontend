@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { logout } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function ChangePassword() {
   const { userId } = useSelector((state) => state.auth);
@@ -75,18 +76,38 @@ function ChangePassword() {
         }
       )
       .then((response) => {
-        console.log("Response:", response.data); // Log response data
-        alert("Your Password was successfully changed.");
+        Swal.fire({
+          title: "Success!",
+          text: "Your Password was changed successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "bg-cardBg dark:bg-darkCardBg",
+            header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+            title:
+              "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+            content: "text-gray-600 dark:text-darkTextColor",
+          },
+        });
         dispatch(logout());
         sessionStorage.clear();
         navigate("/login");
       })
       .catch((error) => {
         console.error("Error response:", error.response); // Log detailed error response
-        const errorMessage =
-          error.response?.data?.message ||
-          "An error occurred while changing the password.";
-        alert(errorMessage);
+        Swal.fire({
+          title: "Error!",
+          text: "An error occurred while changing the password.",
+          icon: "error",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "bg-cardBg dark:bg-darkCardBg",
+            header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+            title:
+              "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+            content: "text-gray-600 dark:text-darkTextColor",
+          },
+        });
       });
   };
 

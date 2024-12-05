@@ -9,23 +9,20 @@ import {
   DatePicker,
   DropDown,
 } from "../../components/common";
-import { useNavigate } from "react-router-dom";
 import dashboardImg from "../../assets/img/dashboard-img.svg";
 import { Edit, Trash } from "iconsax-react";
-import { TRANSACTION_ENDPOINTS } from "../../config/apiConfig";
+import {
+  TRANSACTION_ENDPOINTS,
+  CATEGORY_ENDPOINTS,
+} from "../../config/apiConfig";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
 function Dashboard() {
   const { userId } = useSelector((state) => state.auth);
-  const [selectedOption, setSelectedOption] = useState("");
   const token = sessionStorage.getItem("token");
-
-  const navigate = useNavigate();
-
   const [transactionList, setTransactionList] = useState([]);
-
   const [formState, setFormState] = useState({
     amount: "",
     description: "",
@@ -34,7 +31,6 @@ function Dashboard() {
     categoryId: null,
     transactionId: null,
   });
-
   const [addformState, setAddFormState] = useState({
     amount: "",
     description: "",
@@ -42,7 +38,8 @@ function Dashboard() {
     type: "",
     categoryId: null,
   });
-
+  const [categoryList, setCategoryList] = useState([]); //for dropdown option
+  const [selectedId, setSelectedId] = useState(null); // State to store selected ID
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
 
@@ -77,9 +74,44 @@ function Dashboard() {
       );
     }
   };
+  // Fetch data from API
+  const fetchOption = async () => {
+    // Check for missing token or userId
+    if (!token || !userId) {
+      console.error("Missing token or userId!");
+      return;
+    }
+
+    try {
+      const response = await axios.get(CATEGORY_ENDPOINTS.GET_ALL_CAT, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Pass token in Authorization header
+          accountHolder_id: userId, // Include userId in headers (if required by the API)
+        },
+      });
+      const formattedOptions = response.data.map((item) => ({
+        label: item.name,
+        value: item.id,
+      }));
+
+      setCategoryList(formattedOptions);
+    } catch (error) {
+      console.error("Error fetching dropdown options:", error.message);
+    }
+  };
+
+  // Handle dropdown change
+  const handleDropdownChange = (event) => {
+    const selectedOption = options.find(
+      (option) => option.label === event.target.value
+    );
+    setSelectedId(selectedOption.value); // Save the selected ID
+    console.log("Selected ID:", selectedOption.value);
+  };
 
   useEffect(() => {
     fetchData();
+    fetchOption();
   }, [userId, token]);
 
   // Handle Edit Action
@@ -95,10 +127,10 @@ function Dashboard() {
     setIsModalOpen(true);
   };
 
-  const handleDropdownChange = (option) => {
-    setSelectedOption(option);
-    console.log("Selected option:", option);
-  };
+  // const handleDropdownChange = (option) => {
+  //   setSelectedOption(option);
+  //   console.log("Selected option:", option);
+  // };
 
   const editTransaction = async (event) => {
     event.preventDefault();
@@ -154,20 +186,74 @@ function Dashboard() {
     }
   };
 
-  // Handle Delete Action
   const handleDelete = async (row) => {
-    try {
-      await axios.delete(TRANSACTION_ENDPOINTS.DEL_TRAN_ID(row.ID), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          accountHolder_id: userId,
-        },
-      });
-      alert("Transaction deleted successfully!");
-      fetchData();
-    } catch (error) {
-      console.error("Error deleting transaction:", error);
-      alert("Failed to delete transaction. Please try again.");
+    // Show confirmation alert
+    const result = await Swal.fire({
+      title: "Confirm!",
+      text: "Are you sure you want to delete this transaction?",
+      icon: "warning", // Use 'warning' icon for confirmation
+      showCancelButton: true, // Show Cancel button
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+      customClass: {
+        popup: "bg-cardBg dark:bg-darkCardBg",
+        header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+        title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+        content: "text-gray-600 dark:text-darkTextColor",
+        confirmButton: "bg-red-500 hover:bg-red-600 text-white", // Customize Confirm button style
+        cancelButton: "bg-gray-300 hover:bg-gray-400 text-black", // Customize Cancel button style
+      },
+    });
+
+    // Check if the user confirmed
+    if (result.isConfirmed) {
+      try {
+        // Make API call to delete transaction
+        await axios.delete(TRANSACTION_ENDPOINTS.DEL_TRAN_ID(row.ID), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accountHolder_id: userId,
+          },
+        });
+
+        // Show success message
+        await Swal.fire({
+          title: "Deleted!",
+          text: "Transaction deleted successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "bg-cardBg dark:bg-darkCardBg",
+            header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+            title:
+              "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+            content: "text-gray-600 dark:text-darkTextColor",
+          },
+        });
+
+        // Refresh data after deletion
+        fetchData();
+      } catch (error) {
+        console.error("Error deleting transaction:", error);
+
+        // Show error message
+        await Swal.fire({
+          title: "Error!",
+          text: "Failed to delete transaction. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "bg-cardBg dark:bg-darkCardBg",
+            header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+            title:
+              "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+            content: "text-gray-600 dark:text-darkTextColor",
+          },
+        });
+      }
+    } else {
+      // User canceled, optionally log or handle the cancel action
+      console.log("Delete action canceled by user.");
     }
   };
 
@@ -196,12 +282,34 @@ function Dashboard() {
           },
         }
       );
-      alert("Transaction added successfully!");
+      Swal.fire({
+        title: "Success!",
+        text: "Transaction added successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "bg-cardBg dark:bg-darkCardBg",
+          header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+          title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+          content: "text-gray-600 dark:text-darkTextColor",
+        },
+      });
       closeModalAdd();
       fetchData();
     } catch (error) {
       console.error("Error adding transaction:", error);
-      alert("Failed to add transaction. Please try again.");
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to add transaction. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "bg-cardBg dark:bg-darkCardBg",
+          header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+          title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+          content: "text-gray-600 dark:text-darkTextColor",
+        },
+      });
     }
   };
 
@@ -267,7 +375,7 @@ function Dashboard() {
       </div>
 
       <div className="flex items-center justify-between flex-row max-w-screen-lg pl-4 pr-0">
-        <h1 className="font-medium text-xl">transactions</h1>
+        <h1 className="font-medium text-xl">Transactions</h1>
         <Button
           text="Add Transaction"
           onClick={() => setIsModalOpenAdd(true)}
@@ -327,16 +435,6 @@ function Dashboard() {
               value={formState.amount}
               onChange={(e) => handleInputChange("amount", e.target.value)}
             />
-            {/* <InputText
-              type="text"
-              labelFor="category"
-              labelName="Category"
-              inputId="category"
-              name="Category"
-              placeholder="Enter Category"
-              value={formState.categoryId}
-              onChange={(e) => handleInputChange("category", e.target.value)}
-            /> */}
             <DropDown
               labelFor="category"
               labelName="Category"
@@ -344,19 +442,12 @@ function Dashboard() {
               placeholder="Select Category"
               variant="primary"
               ClassName="dropDownMain"
-              options={[
-                "Option 1",
-                "Option 2",
-                "Option 3",
-                "Option 3",
-                "Option 3",
-                "Option 3",
-                "Option 3",
-                "Option 3",
-                "Option 3",
-              ]}
-              selectedValue={selectedOption}
-              onChange={handleDropdownChange}
+              options={categoryList}
+              selectedValue={formState.categoryId}
+              onChange={(e) => {
+                setSelectedId(e);
+                handleInputChange("categoryId", selectedId);
+              }}
             />
             <DatePicker
               labelFor="transactionDate"
@@ -438,20 +529,6 @@ function Dashboard() {
                 setAddFormState((prev) => ({ ...prev, amount: e.target.value }))
               }
             />
-            {/* <InputText
-                type="text"
-                labelFor="category"
-                labelName="Category"
-                inputId="category"
-                placeholder="Enter Category"
-                value={addformState.categoryId || ""}
-                onChange={(e) =>
-                  setAddFormState((prev) => ({
-                    ...prev,
-                    categoryId: e.target.value,
-                  }))
-                }
-              /> */}
             <DropDown
               labelFor="category"
               labelName="Category"
@@ -459,19 +536,15 @@ function Dashboard() {
               placeholder="Select Category"
               variant="primary"
               ClassName="dropDownMain"
-              options={[
-                "Option 1",
-                "Option 2",
-                "Option 3",
-                "Option 3",
-                "Option 3",
-                "Option 3",
-                "Option 3",
-                "Option 3",
-                "Option 3",
-              ]}
-              selectedValue={selectedOption}
-              onChange={handleDropdownChange}
+              options={categoryList}
+              selectedValue={formState.categoryId}
+              onChange={(e) => {
+                setSelectedId(e);
+                setAddFormState((prev) => ({
+                  ...prev,
+                  categoryId: selectedId, // Update categoryId directly
+                }));
+              }}
             />
             <DatePicker
               labelFor="transactionDate"

@@ -4,6 +4,7 @@ import { Button, InputText, InputPassword } from "../../components/common";
 import registerImg from "../../assets/img/register-img.svg";
 import { AUTH_ENDPOINTS } from "../../config/apiConfig";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function register() {
   const navigate = useNavigate();
@@ -160,12 +161,36 @@ function register() {
         },
       })
       .then((response) => {
-        alert("CUSTOMER CREATED SUCCESSFULLY!");
+        Swal.fire({
+          title: "Success!",
+          text: "Your Profile are created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "bg-cardBg dark:bg-darkCardBg",
+            header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+            title:
+              "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+            content: "text-gray-600 dark:text-darkTextColor",
+          },
+        });
         navigate("/login");
       })
       .catch((error) => {
         if (error.response.status === 500) {
-          alert("EMAIL ALREADY IN USE!");
+          Swal.fire({
+            title: "Error! EMAIL ALREADY IN USE!",
+            text: "Failed to register your profile. Please try again.",
+            icon: "error",
+            confirmButtonText: "OK",
+            customClass: {
+              popup: "bg-cardBg dark:bg-darkCardBg",
+              header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+              title:
+                "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+              content: "text-gray-600 dark:text-darkTextColor",
+            },
+          });
         }
       });
   };

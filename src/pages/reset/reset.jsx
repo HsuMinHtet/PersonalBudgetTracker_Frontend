@@ -5,6 +5,7 @@ import InputText from "../../components/common/InputText";
 import resetImg from "../../assets/img/reset-img.svg";
 import { AUTH_ENDPOINTS } from "../../config/apiConfig";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function Reset() {
   const navigate = useNavigate();
@@ -24,12 +25,36 @@ function Reset() {
       .post(AUTH_ENDPOINTS.FORGOT_PASSWORD, { email })
       .then((response) => {
         console.log("Response:", response.data); // Log response data
-        alert("Password reset link sent to your email.");
+        Swal.fire({
+          title: "Success!",
+          text: "Password reset link sent to your email.!",
+          icon: "success",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "bg-cardBg dark:bg-darkCardBg",
+            header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+            title:
+              "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+            content: "text-gray-600 dark:text-darkTextColor",
+          },
+        });
         navigate("/login");
       })
       .catch((error) => {
         console.error("Error response:", error.response); // Log detailed error response
-        alert("Invalid email!");
+        Swal.fire({
+          title: "Error! EMAIL ALREADY IN USE!",
+          text: "Invalid email!",
+          icon: "error",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "bg-cardBg dark:bg-darkCardBg",
+            header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+            title:
+              "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+            content: "text-gray-600 dark:text-darkTextColor",
+          },
+        });
       });
   };
   return (

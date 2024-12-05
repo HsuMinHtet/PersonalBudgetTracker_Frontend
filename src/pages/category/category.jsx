@@ -5,6 +5,7 @@ import { Edit, Trash } from "iconsax-react";
 import { CATEGORY_ENDPOINTS } from "../../config/apiConfig";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 function Category() {
   const { userId } = useSelector((state) => state.auth);
@@ -74,29 +75,101 @@ function Category() {
           },
         }
       );
-      alert("Category updated successfully!");
+      Swal.fire({
+        title: "Success!",
+        text: "Category updated successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "bg-cardBg dark:bg-darkCardBg",
+          header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+          title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+          content: "text-gray-600 dark:text-darkTextColor",
+        },
+      });
       closeModal();
       fetchData();
     } catch (error) {
       console.error("Error updating category:", error);
-      alert("Failed to update category. Please try again.");
+      // Show error message
+      await Swal.fire({
+        title: "Error!",
+        text: "Failed to update category. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "bg-cardBg dark:bg-darkCardBg",
+          header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+          title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+          content: "text-gray-600 dark:text-darkTextColor",
+        },
+      });
     }
   };
 
   // Handle Delete Action
   const handleDelete = async (row) => {
-    try {
-      await axios.delete(CATEGORY_ENDPOINTS.DEL_CAT_ID(row.ID), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          accountHolder_id: userId,
-        },
-      });
-      alert("Category deleted successfully!");
-      fetchData();
-    } catch (error) {
-      const errorMessage = error.response?.data;
-      alert(`Failed to delete: ${errorMessage}`);
+    // Show confirmation alert
+    const result = await Swal.fire({
+      title: "Confirm!",
+      text: "Are you sure you want to delete this category?",
+      icon: "warning", // Use 'warning' icon for confirmation
+      showCancelButton: true, // Show Cancel button
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+      customClass: {
+        popup: "bg-cardBg dark:bg-darkCardBg",
+        header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+        title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+        content: "text-gray-600 dark:text-darkTextColor",
+        confirmButton: "bg-red-500 hover:bg-red-600 text-white", // Customize Confirm button style
+        cancelButton: "bg-gray-300 hover:bg-gray-400 text-black", // Customize Cancel button style
+      },
+    });
+
+    // Check if the user confirmed
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(CATEGORY_ENDPOINTS.DEL_CAT_ID(row.ID), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accountHolder_id: userId,
+          },
+        });
+        Swal.fire({
+          title: "Success!",
+          text: "Category deleted successfully",
+          icon: "success",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "bg-cardBg dark:bg-darkCardBg",
+            header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+            title:
+              "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+            content: "text-gray-600 dark:text-darkTextColor",
+          },
+        });
+        fetchData();
+      } catch (error) {
+        const errorMessage = error.response?.data;
+        // Show error message
+        await Swal.fire({
+          title: "Error!",
+          text: `${errorMessage} Please try again.`,
+          icon: "error",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "bg-cardBg dark:bg-darkCardBg",
+            header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+            title:
+              "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+            content: "text-gray-600 dark:text-darkTextColor",
+          },
+        });
+      }
+    } else {
+      // User canceled, optionally log or handle the cancel action
+      console.log("Delete action canceled by user.");
     }
   };
 
@@ -121,12 +194,35 @@ function Category() {
           },
         }
       );
-      alert("Category added successfully!");
+      Swal.fire({
+        title: "Success!",
+        text: "Category added successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "bg-cardBg dark:bg-darkCardBg",
+          header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+          title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+          content: "text-gray-600 dark:text-darkTextColor",
+        },
+      });
       closeModalAdd();
       fetchData();
     } catch (error) {
       console.error("Error adding category:", error);
-      alert("Failed to add new category. Please try again.");
+      // Show error message
+      await Swal.fire({
+        title: "Error!",
+        text: "Failed to add new Category. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "bg-cardBg dark:bg-darkCardBg",
+          header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+          title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+          content: "text-gray-600 dark:text-darkTextColor",
+        },
+      });
     }
   };
 

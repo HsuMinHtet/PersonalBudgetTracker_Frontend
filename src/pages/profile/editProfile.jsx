@@ -5,6 +5,7 @@ import registerImg from "../../assets/img/register-img.svg";
 import { ACCOUNT_HOLDER_ENDPOINTS } from "../../config/apiConfig";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 function EditProfile() {
   const navigate = useNavigate();
@@ -100,14 +101,36 @@ function EditProfile() {
         updatedProfile,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert("Profile updated successfully!");
+      Swal.fire({
+        title: "Success!",
+        text: "Profile updated successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "bg-cardBg dark:bg-darkCardBg",
+          header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+          title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+          content: "text-gray-600 dark:text-darkTextColor",
+        },
+      });
       navigate("/profile");
     } catch (error) {
       console.error(
         "Error updating profile:",
         error.response?.data || error.message
       );
-      alert("Failed to update profile. Please try again.");
+      await Swal.fire({
+        title: "Error!",
+        text: "Failed to update profile. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "bg-cardBg dark:bg-darkCardBg",
+          header: "text-xl font-bold text-gray-700 dark:text-darkTextColor",
+          title: "text-2xl font-semibold text-gray-800 dark:text-darkTextColor",
+          content: "text-gray-600 dark:text-darkTextColor",
+        },
+      });
     }
   };
 
@@ -156,7 +179,7 @@ function EditProfile() {
         className="h-96 w-96 p-6 mr-6"
       />
       <div className="bg-cardBg dark:bg-darkCardBg p-12">
-        <h1 className="font-black text-2xl mb-12 px-3">Register</h1>
+        <h1 className="font-black text-2xl mb-12 px-3">Edit Profile</h1>
         <form onSubmit={handleRegister}>
           <div className="flex items-center justify-center flex-row">
             <InputText
@@ -264,7 +287,7 @@ function EditProfile() {
           </div>
           <Button
             type="submit"
-            text="Register"
+            text="Edit"
             variant="primary"
             tailwindClass="w-full mt-12"
           />

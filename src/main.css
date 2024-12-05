@@ -21,3 +21,7 @@ html.dark {
 * {
   cursor: none!important;
 }
+
+.swal2-popup {
+  z-index: 999!important;
+}
