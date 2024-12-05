@@ -34,8 +34,6 @@
 
 1. Clone the repositories:
 
-#### Frontend
-
 ```bash
 git clone https://github.com/HsuMinHtet/PersonalBudgetTracker_Frontend.git
 ```
@@ -46,7 +44,6 @@ git clone https://github.com/HsuMinHtet/PersonalBudgetTracker_Frontend.git
    ```
 3. Install dependencies:
 
-#### For Frontend:
 
 ```bash
 npm install
@@ -54,9 +51,7 @@ npm install
 
 4. Run the application:
 
-#### For Backend:
-
-###### 1. Configure API URL in /src/config/apiCongig.js
+###### 1. Configure API URL in /src/config/apiConfig.js
 
 ###### 2. Admin User is initially registered at Application Class.(admin@budget.com,password@123) as default
 
