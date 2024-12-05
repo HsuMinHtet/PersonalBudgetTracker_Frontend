@@ -539,13 +539,14 @@ function Dashboard() {
               options={categoryList}
               selectedValue={formState.categoryId}
               onChange={(e) => {
-                setSelectedId(e);
+                setSelectedId(e); // Update selectedId state
                 setAddFormState((prev) => ({
                   ...prev,
-                  categoryId: selectedId, // Update categoryId directly
+                  categoryId: e, // Directly use e instead of selectedId
                 }));
               }}
             />
+
             <DatePicker
               labelFor="transactionDate"
               labelName="Transaction Date"
