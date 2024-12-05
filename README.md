@@ -2,7 +2,7 @@
 
 # Front-end
 
-### Functional Requirements:
+### System Intro:
 
 - **Welcome**:
   ![welcome_dark](assets/home_dark.png)
