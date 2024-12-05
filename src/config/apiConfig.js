@@ -1,4 +1,5 @@
-const API_BASE_URL = "http://localhost:8080/api/v1";
+const API_BASE_URL =
+  "https://budgettracker-h6hbcvfth4gqaacm.canadacentral-01.azurewebsites.net/api/v1";
 
 // Authentication Endpoints
 export const AUTH_ENDPOINTS = {
