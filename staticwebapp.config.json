@@ -1,0 +1,9 @@
+{
+    "routes": [
+      {
+        "route": "/api/*",
+        "rewrite": "https://budgettracker-h6hbcvfth4gqaacm.canadacentral-01.azurewebsites.net/api/*"
+      }
+    ]
+  }
+  
