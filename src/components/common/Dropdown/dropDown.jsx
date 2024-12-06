@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import styles from "./dropdown.module.css";
+import styles from "./dropDown.module.css";
 import { ArrowDown2, ArrowUp2 } from "iconsax-react";
 import classNames from "classnames";
 
