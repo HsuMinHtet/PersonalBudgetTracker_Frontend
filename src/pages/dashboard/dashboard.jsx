@@ -358,8 +358,8 @@ function Dashboard() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-center flex-row max-w-screen-lg p-4">
-        <div>
+      <div className="flex items-center justify-center flex-row xs:flex-col sm:flex-col max-w-screen-lg p-4 xs:py-12 sm:py-12">
+        <div className="xs:w-full sm:w-full">
           <h1 className="font-black text-2xl">Track Your Finances with Ease</h1>
           <p className="py-4 mb-4">
             Welcome to your Budget Tracker Dashboard! Here, you can seamlessly
@@ -371,7 +371,7 @@ function Dashboard() {
             document every transaction. Take control of your finances today!
           </p>
         </div>
-        <img src={dashboardImg} alt="Categories" className="h-60 w-60 p-6" />
+        <img src={dashboardImg} alt="Categories" className="h-60 w-60 p-6 xs:hidden sm:hidden" />
       </div>
 
       <div className="flex items-center justify-between flex-row max-w-screen-lg pl-4 pr-0">

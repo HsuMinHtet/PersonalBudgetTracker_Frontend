@@ -81,7 +81,7 @@ function Profile() {
         <div className="flex flex-col border-solid border-r-2 border-borderColor dark:border-darkBorderColor px-4">
           <Avatar
             name={profile.name}
-            tailwindClass="border-solid border-2 border-borderColor dark:border-darkBorderColor mb-10"
+            tailwindClass="border-solid border-2 text-textColor dark:text-darkTextColor border-borderColor dark:border-darkBorderColor mb-10"
           />
 
           <ProfileMenu />

@@ -18,10 +18,6 @@ html.dark {
   background-color: transparent!important;
 }
 
-* {
-  cursor: none!important;
-}
-
-.swal2-popup {
-  z-index: 999!important;
-}
+/* * {
+  cursor: none;
+} */
