@@ -1,5 +1,5 @@
 const API_BASE_URL =
-  "https://budgettracker-h6hbcvfth4gqaacm.canadacentral-01.azurewebsites.net/api/v1";
+  "https://budgettracker03-d6b2dxeef3exeyg7.canadacentral-01.azurewebsites.net/api/v1";
 
 // Authentication Endpoints
 export const AUTH_ENDPOINTS = {
