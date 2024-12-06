@@ -66,9 +66,9 @@ const Dropdown = ({
         </div>
         <div className={styles.toggleIcon}>
           {isOpen ? (
-            <ArrowUp2 className="text-gray-500" size="20" />
+            <ArrowUp2 className="text-textColor dark:text-darkTextColor" size="20" />
           ) : (
-            <ArrowDown2 className="text-gray-500" size="20" />
+            <ArrowDown2 className="text-textColor dark:text-darkTextColor" size="20" />
           )}
         </div>
       </div>

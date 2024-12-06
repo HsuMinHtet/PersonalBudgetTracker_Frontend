@@ -50,25 +50,25 @@ function header() {
         className="flex items-center m-2"
       >
         {isDarkMode ? (
-          <img src={logoDark} alt="Budget App Logo" className="h-12 w-12 " />
+          <img src={logoDark} alt="Budget App Logo" className="inline-block h-12 w-12" />
         ) : (
-          <img src={logoLight} alt="Budget App Logo" className="h-12 w-12 " />
+          <img src={logoLight} alt="Budget App Logo" className="inline-block h-12 w-12" />
         )}
-        <h3 className="mx-2 font-black hover:text-primaryTextColor">Budget Tracker App</h3>
+        <h3 className="mx-2 font-black hover:text-primaryTextColor xs:hidden sm:hidden md:inline-block lg:inline-block">Budget Tracker App</h3>
       </Link>
       <div className="flex items-center">
         <Menu />
-        <div onClick={toggleDarkMode} className="ml-2 hover:animate-pulse hover:cursor-none">
+        <div onClick={toggleDarkMode} className="ml-2">
           {isDarkMode ? (
             <Sun1
               size="24"
-              className="text-textColor dark:text-darkTextColor"
+              className="text-textColor dark:text-darkTextColor hover:animate-spin"
               title="Switch to Light Mode"
             />
           ) : (
             <Moon
               size="24"
-              className="text-textColor dark:text-darkTextColor"
+                className="text-textColor dark:text-darkTextColor hover:animate-ping"
               title="Switch to Dark Mode"
             />
           )}

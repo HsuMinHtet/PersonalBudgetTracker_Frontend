@@ -52,9 +52,9 @@ const DatePicker = ({
                             value={date ? date.toISOString().split("T")[0] : ""}
                             readOnly
                             placeholder={placeholder}
-                            className={`${styles.customInput} bg-cardBg dark:bg-darkCardBg text-gray-800 rounded-lg w-full p-2 cursor-pointer`}
+                            className={`${styles.customInput} bg-cardBg dark:bg-darkCardBg text-textColor dark:text-darkTextColor rounded-lg w-full p-2 cursor-pointer`}
                         />
-                        <Calendar className="ml-2 text-gray-500 calendarIcon" size="20" />
+                        <Calendar className="ml-2 text-textColor dark:text-darkTextColor calendarIcon" size="20" />
                     </div>
                 }
                 calendarClassName={styles.calendar}

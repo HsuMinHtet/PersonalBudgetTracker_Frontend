@@ -62,7 +62,7 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
 
 createRoot(document.getElementById("budgetApp")).render(
   <StrictMode>
-    <AnimatedCursor
+    {/* <AnimatedCursor
       outerAlpha={0}
       hasBlendMode={true}
       innerStyle={{
@@ -71,8 +71,8 @@ createRoot(document.getElementById("budgetApp")).render(
       outerStyle={{
         border: "3px solid var(--cursor-color)",
       }}
-      zIndex={9999}
-    />
+      zIndex={9999999}
+    /> */}
 
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
