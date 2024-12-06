@@ -2,7 +2,7 @@
     "routes": [
       {
         "route": "/api/*",
-        "rewrite": "https://budgettracker-h6hbcvfth4gqaacm.canadacentral-01.azurewebsites.net/api/*"
+        "rewrite": "https://budgettracker03-d6b2dxeef3exeyg7.canadacentral-01.azurewebsites.net/api/*"
       }
     ]
   }
