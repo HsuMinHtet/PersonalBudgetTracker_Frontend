@@ -22,7 +22,7 @@
 ### Technologies Used
 
 - React.js (ver: 18.3.1)
-- Tailwind(ver: 3.4.15), HTML5
+- Tailwind(ver: 3.4.15)
 - **Version Control**: GitHub
 - **Cloud**: Azure
 
